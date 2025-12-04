@@ -16,11 +16,18 @@ source ~/.zshrc
 ### Core Dependencies
 - **Homebrew** - macOS package manager (prerequisite for other tools)
 - **GNU Stow** - Dotfile symlink manager
+
+### Development Tools
 - **tree** - Directory visualization tool
-- **Claude CLI** - AI assistance (with fallback handling if unavailable)
+- **Claude CLI** - AI assistance from the command line
+- **Neovim** - Modern text editor (with lazy.nvim plugin manager)
+- **OpenCode CLI** - OpenCode editor CLI
+- **GitHub CLI (gh)** - GitHub command-line interface
 
 ### Configurations
 - **~/.zshrc.toolbox** - Custom Zsh config (symlinked via Stow)
+- **~/.config/nvim/** - Neovim configuration with lazy.nvim
+- **~/.config/toolbox/cheatsheets/** - Quick reference guides
 - **~/.zshrc** - Modified to source ~/.zshrc.toolbox
 
 ## Installation Options
@@ -45,8 +52,9 @@ Prompts for each component, allowing you to pick and choose.
 
 ### Cherry-Pick Components
 ```bash
-./install.sh --brew --stow --tree    # Install specific components
-./install.sh --dotfiles --zshrc      # Just setup dotfiles
+./install.sh --brew --stow --tree          # Install specific components
+./install.sh --claude --neovim --gh        # Install dev tools
+./install.sh --dotfiles --zshrc            # Just setup dotfiles
 ```
 
 ## Available Flags
@@ -57,7 +65,10 @@ Prompts for each component, allowing you to pick and choose.
 - `--stow` - Install GNU Stow
 - `--tree` - Install tree command
 - `--claude` - Install Claude CLI
-- `--dotfiles` - Stow dotfiles (symlink ~/.zshrc.toolbox)
+- `--neovim` - Install Neovim
+- `--opencode` - Install OpenCode CLI
+- `--gh` - Install GitHub CLI
+- `--dotfiles` - Stow dotfiles (symlink ~/.zshrc.toolbox, nvim config, cheatsheets)
 - `--zshrc` - Modify ~/.zshrc to source toolbox config
 - `-h, --help` - Show help message
 
@@ -123,6 +134,7 @@ Claude CLI may not be available via Homebrew. The installer will warn but contin
 toolbox/
 ├── install.sh              # Main installation orchestrator
 ├── README.md               # This file
+├── AGENTS.md               # Claude Code project instructions
 ├── FEATURES.md             # Feature roadmap
 │
 ├── lib/                    # Modular installation functions
@@ -136,14 +148,22 @@ toolbox/
 ├── deps/                   # Dependency installers (cross-platform)
 │   ├── stow.sh             # GNU Stow
 │   ├── tree.sh             # tree command
-│   └── claude.sh           # Claude CLI
+│   ├── claude.sh           # Claude CLI
+│   ├── neovim.sh           # Neovim editor
+│   ├── opencode.sh         # OpenCode CLI
+│   └── gh.sh               # GitHub CLI
 │
 ├── dotfiles/               # Stow-managed dotfiles
-│   └── zsh/
-│       └── .zshrc.toolbox  # Custom Zsh configuration
+│   ├── zsh/
+│   │   └── .zshrc.toolbox  # Custom Zsh configuration
+│   ├── nvim/
+│   │   └── .config/nvim/   # Neovim configuration
+│   └── cheatsheets/
+│       └── .config/toolbox/cheatsheets/  # Reference guides
 │
 ├── scripts/                # Utility scripts
-│   └── help.sh             # Help information (placeholder)
+│   ├── help.sh             # Help information
+│   └── cwd.sh              # Working directory management
 │
 └── docs/                   # Documentation
     └── EXTENDING.md        # Extension guide
@@ -153,6 +173,7 @@ toolbox/
 
 This toolbox focuses on:
 - **Simplicity** - Bash scripts you can understand and modify
+- **Idempotent** - The script can be freely re-run, and will proceed if any one installation fails
 - **Modularity** - Each component is independent and self-contained
 - **Clarity** - Explicit installation order, no magic auto-detection
 - **Cross-platform ready** - Structure supports future Linux support (V4+)
@@ -161,14 +182,6 @@ This toolbox focuses on:
 
 - [joe.sh/terminal-tools](https://joe.sh/terminal-tools) - Philosophy and approach
 - [josephschmitt/dotfiles](https://github.com/josephschmitt/dotfiles) - Structure and conventions
-
-## Future Plans
-
-See [FEATURES.md](FEATURES.md) for the complete roadmap including:
-- V2: More CLI tools (ripgrep, fzf, bat, eza, fd, jq, yq)
-- V3: Advanced dotfiles (git, tmux, neovim, ssh)
-- V4: Cross-platform support (Linux)
-- V5: Enhanced developer experience (health checks, dry-run mode, tests)
 
 ## License
 
