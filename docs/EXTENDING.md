@@ -5,6 +5,7 @@ This guide explains how to add new packages, configurations, and features to you
 ## Table of Contents
 
 - [Compatibility](#compatibility)
+- [Scripts and Wrapper Functions Pattern](#scripts-and-wrapper-functions-pattern)
 - [Adding Homebrew Packages](#adding-homebrew-packages)
 - [Adding Dotfile Configurations](#adding-dotfile-configurations)
 - [Understanding Self-Registering Components](#understanding-self-registering-components)
@@ -19,6 +20,30 @@ This guide explains how to add new packages, configurations, and features to you
 **Supported Platforms:**
 - macOS (primary platform)
 - Linux (experimental, V4+)
+
+---
+
+## Scripts and Wrapper Functions Pattern
+
+For user-facing commands and utilities, the toolbox uses a **scripts + wrapper functions pattern**:
+
+1. **Core Logic in `scripts/`** - Standalone bash script with the actual functionality
+2. **Wrapper Function in `~/.zshrc.toolbox`** - Thin shell function that calls the script
+3. **User Configuration** - Any settings stored in `~/.config/toolbox/` (not tracked by git)
+
+This approach keeps scripts testable and portable (can run outside shell context), while providing convenient command-line access through shell functions.
+
+### When to Use This Pattern
+
+✅ **Use this pattern for:**
+- User-facing commands that should persist across shells
+- Features with user-specific configuration
+- Utilities that might need to run from cron, scripts, or other non-shell contexts
+
+❌ **Don't use this pattern for:**
+- Simple aliases (just use `.zshrc.toolbox`)
+- Homebrew/package installations (use `deps/` pattern)
+- Shell-only utilities that never need to run standalone
 
 ---
 
