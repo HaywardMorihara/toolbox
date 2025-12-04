@@ -1,0 +1,69 @@
+# ~/.zshrc.toolbox
+# Managed by: https://github.com/HaywardMorihara/toolbox
+# This file is symlinked from the toolbox repo and sourced by ~/.zshrc
+
+# ===== Path Configuration =====
+# Ensure local binaries are in PATH
+export PATH="$HOME/.local/bin:$PATH"
+
+# Homebrew (if installed)
+if [[ -f "/opt/homebrew/bin/brew" ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+elif [[ -f "/usr/local/bin/brew" ]]; then
+  eval "$(/usr/local/bin/brew shellenv)"
+fi
+
+# ===== Aliases =====
+alias ls='ls -G'          # Colorized ls (macOS)
+alias ll='ls -lah'        # Long listing
+alias tree='tree -C'      # Colorized tree
+
+# Git shortcuts
+alias gs='git status'
+alias gd='git diff'
+alias gc='git commit'
+alias gp='git push'
+
+# Homebrew shortcuts
+alias brewup='brew update && brew upgrade && brew cleanup'
+alias brewlist='brew list'
+
+# ===== Custom Functions =====
+
+# Quick navigation to toolbox repo
+toolbox() {
+  cd "$HOME/development/toolbox" || return
+}
+
+# Refresh shell configuration
+refresh() {
+  source ~/.zshrc
+  echo "Shell configuration reloaded!"
+}
+
+# Update toolbox repository
+toolbox-update() {
+  echo "Updating toolbox..."
+  cd "$HOME/development/toolbox" || return
+  git pull
+  echo "Toolbox updated! Run './install.sh --all' to apply any new changes."
+}
+
+# List all installed Homebrew packages
+brew-installed() {
+  echo "Formulae:"
+  brew list --formula
+  echo ""
+  echo "Casks:"
+  brew list --cask
+}
+
+# ===== Environment Variables =====
+# Add tool-specific environment variables here
+
+# Example: Set default editor
+export EDITOR="vim"
+
+# ===== Welcome Message (optional) =====
+# Uncomment to show a message when opening new terminal
+# echo "Toolbox loaded! Run 'toolbox' to navigate to repo."
