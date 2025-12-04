@@ -69,7 +69,10 @@ After installation, these commands are available from ~/.zshrc.toolbox:
 refresh            # Reload shell configuration (no need to source ~/.zshrc manually)
 toolbox            # Navigate to toolbox repository
 toolbox-update     # Pull latest changes from git
+cwd                # Set current directory as the default working directory
 ```
+
+New terminal tabs will automatically switch to your default working directory.
 
 ## Customizing Your Config
 

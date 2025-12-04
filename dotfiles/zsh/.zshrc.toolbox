@@ -35,6 +35,12 @@ toolbox() {
   cd "$HOME/development/toolbox" || return
 }
 
+# Manage default working directory
+# See: scripts/cwd.sh for implementation
+cwd() {
+  bash "$HOME/development/toolbox/scripts/cwd.sh" "$@"
+}
+
 # Refresh shell configuration
 refresh() {
   source ~/.zshrc
@@ -63,6 +69,21 @@ brew-installed() {
 
 # Example: Set default editor
 export EDITOR="vim"
+
+# ===== Auto-activate Default Working Directory =====
+# Automatically change to the default working directory for interactive shells
+if [[ $- == *i* ]]; then
+  DEFAULT_WD_FILE="${XDG_CONFIG_HOME:-$HOME/.config}/toolbox/default-wd"
+  if [[ -f "$DEFAULT_WD_FILE" ]]; then
+    DEFAULT_WD="$(cat "$DEFAULT_WD_FILE")"
+    if [[ -d "$DEFAULT_WD" ]]; then
+      cd "$DEFAULT_WD" || true
+    else
+      echo "Warning: Default working directory no longer exists: $DEFAULT_WD" >&2
+    fi
+  fi
+  unset DEFAULT_WD_FILE DEFAULT_WD
+fi
 
 # ===== Welcome Message (optional) =====
 # Uncomment to show a message when opening new terminal
