@@ -30,6 +30,7 @@ INSTALL_NEOVIM=false
 INSTALL_OPENCODE=false
 INSTALL_DOTFILES=false
 INSTALL_ZSHRC=false
+INSTALL_UPDATE=false
 INTERACTIVE=true
 
 show_help() {
@@ -48,6 +49,7 @@ OPTIONS:
   --opencode     Install OpenCode CLI
   --dotfiles     Stow dotfiles (symlink ~/.zshrc.toolbox)
   --zshrc        Modify ~/.zshrc to source toolbox config
+  --update       Update toolbox repository (git pull)
   -h, --help     Show this help message
 
 EXAMPLES:
@@ -90,6 +92,9 @@ parse_flags() {
       --zshrc)
         INSTALL_ZSHRC=true
         ;;
+      --update)
+        INSTALL_UPDATE=true
+        ;;
       --help|-h)
         show_help
         exit 0
@@ -103,7 +108,7 @@ parse_flags() {
     shift
   done
 
-  export INSTALL_ALL INSTALL_BREW INSTALL_STOW INSTALL_TREE INSTALL_CLAUDE INSTALL_NEOVIM INSTALL_OPENCODE INSTALL_DOTFILES INSTALL_ZSHRC INTERACTIVE
+  export INSTALL_ALL INSTALL_BREW INSTALL_STOW INSTALL_TREE INSTALL_CLAUDE INSTALL_NEOVIM INSTALL_OPENCODE INSTALL_DOTFILES INSTALL_ZSHRC INSTALL_UPDATE INTERACTIVE
 }
 
 # Parse flags

@@ -41,6 +41,12 @@ cwd() {
   bash "$HOME/development/toolbox/scripts/cwd.sh" "$@"
 }
 
+# Show cheatsheets
+# See: scripts/help.sh for implementation
+help() {
+  bash "$HOME/development/toolbox/scripts/help.sh" "$@"
+}
+
 # Refresh shell configuration
 refresh() {
   source ~/.zshrc
