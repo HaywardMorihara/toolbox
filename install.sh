@@ -26,6 +26,7 @@ INSTALL_BREW=false
 INSTALL_STOW=false
 INSTALL_TREE=false
 INSTALL_CLAUDE=false
+INSTALL_NEOVIM=false
 INSTALL_DOTFILES=false
 INSTALL_ZSHRC=false
 INTERACTIVE=true
@@ -42,6 +43,7 @@ OPTIONS:
   --stow         Install GNU Stow
   --tree         Install tree command
   --claude       Install Claude CLI
+  --neovim       Install Neovim
   --dotfiles     Stow dotfiles (symlink ~/.zshrc.toolbox)
   --zshrc        Modify ~/.zshrc to source toolbox config
   -h, --help     Show this help message
@@ -74,6 +76,9 @@ parse_flags() {
       --claude)
         INSTALL_CLAUDE=true
         ;;
+      --neovim)
+        INSTALL_NEOVIM=true
+        ;;
       --dotfiles)
         INSTALL_DOTFILES=true
         ;;
@@ -93,7 +98,7 @@ parse_flags() {
     shift
   done
 
-  export INSTALL_ALL INSTALL_BREW INSTALL_STOW INSTALL_TREE INSTALL_CLAUDE INSTALL_DOTFILES INSTALL_ZSHRC INTERACTIVE
+  export INSTALL_ALL INSTALL_BREW INSTALL_STOW INSTALL_TREE INSTALL_CLAUDE INSTALL_NEOVIM INSTALL_DOTFILES INSTALL_ZSHRC INTERACTIVE
 }
 
 # Parse flags
@@ -132,10 +137,13 @@ main() {
   # 4. Install Claude CLI
   install_claude || log_warn "Failed to install Claude CLI"
 
-  # 5. Stow dotfiles (creates ~/.zshrc.toolbox symlink)
+  # 5. Install Neovim
+  install_neovim || log_warn "Failed to install Neovim"
+
+  # 6. Stow dotfiles (creates ~/.zshrc.toolbox symlink)
   stow_dotfiles "$REPO_ROOT" || log_warn "Failed to stow dotfiles"
 
-  # 6. Modify ~/.zshrc (source ~/.zshrc.toolbox)
+  # 7. Modify ~/.zshrc (source ~/.zshrc.toolbox)
   setup_zshrc_integration || log_warn "Failed to setup .zshrc integration"
 
   # Summary

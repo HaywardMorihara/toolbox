@@ -26,9 +26,17 @@ stow_dotfiles() {
     return 1
   }
 
-  log_success "Dotfiles stowed: ~/.zshrc.toolbox is now symlinked"
+  # Stow nvim package (using dotfiles/ directory)
+  stow -d dotfiles -t ~ nvim || {
+    log_error "Failed to stow nvim dotfiles"
+    log_info "If conflicts exist, backup and remove: ~/.config/nvim"
+    return 1
+  }
+
+  log_success "Dotfiles stowed successfully"
   return 0
 }
 
-# Register check for installation summary
+# Register checks for installation summary
 register_check "~/.zshrc.toolbox (symlinked)" "[[ -L \$HOME/.zshrc.toolbox ]]"
+register_check "~/.config/nvim (symlinked)" "[[ -L \$HOME/.config/nvim ]]"
