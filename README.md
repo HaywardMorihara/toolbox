@@ -31,6 +31,12 @@ source ~/.zshrc
 ```
 Non-interactive mode - installs all components without prompting.
 
+### Update and Install
+```bash
+./install.sh --update --all
+```
+Pulls latest changes from git, then installs all components.
+
 ### Interactive Mode (Default)
 ```bash
 ./install.sh
@@ -46,6 +52,7 @@ Prompts for each component, allowing you to pick and choose.
 ## Available Flags
 
 - `--all` - Install all components non-interactively
+- `--update` - Pull latest changes from git before installing
 - `--brew` - Install Homebrew
 - `--stow` - Install GNU Stow
 - `--tree` - Install tree command

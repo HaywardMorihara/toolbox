@@ -119,6 +119,17 @@ fi
 main() {
   log_info "====== Toolbox Installation Starting ======"
 
+  # Pull latest changes if --update flag is set
+  if [[ "$INSTALL_UPDATE" == true ]]; then
+    log_info "Pulling latest changes from remote..."
+    cd "$REPO_ROOT" || exit 1
+    if ! git pull; then
+      log_error "Failed to pull latest changes"
+      exit 1
+    fi
+    log_success "Repository updated"
+  fi
+
   # 1. Install Homebrew (macOS package manager, prerequisite for other tools)
   install_brew || {
     log_error "Homebrew installation failed. Cannot proceed."
