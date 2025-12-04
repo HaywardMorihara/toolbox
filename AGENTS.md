@@ -194,6 +194,10 @@ register_check "Name" "check command"        # Register for summary (call at mod
 show_installation_summary                    # Display all checks
 ```
 
+## Updating Documentation After install.sh Changes
+
+Whenever you make meaningful changes to `install.sh` (flags, behavior, installation order, etc.), update README.md, AGENTS.md, and keep `show_help()` in sync.
+
 ## Common Pitfalls
 
 1. **Forgetting to register checks** - Always call `register_check()` at module level, not inside functions
@@ -201,6 +205,7 @@ show_installation_summary                    # Display all checks
 3. **Missing flag declaration** - Add to `parse_flags()`, export list, and help message
 4. **Wrong check commands** - Use `command -v tool` for CLI tools, `[[ -L $HOME/file ]]` for symlinks
 5. **Not respecting the dependency order** - Homebrew must come before other tools
+6. **Forgetting documentation updates** - Always sync README.md, AGENTS.md, and install.sh help text after interface changes
 
 ## References
 
