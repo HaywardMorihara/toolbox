@@ -127,9 +127,68 @@ OPTIONS:
   --your-tool    Install Your Tool
 ```
 
-### Real Example: ripgrep
+### Real Example 1: OpenCode (CLI Tool)
 
-Here's a complete example for adding ripgrep:
+Here's a complete example for adding OpenCode, an interactive CLI tool installed via Homebrew:
+
+**deps/opencode.sh:**
+```bash
+#!/usr/bin/env bash
+# deps/opencode.sh - OpenCode CLI installation
+
+install_opencode() {
+  local component_name="OpenCode CLI"
+
+  # Check if already installed (idempotency)
+  if command -v opencode &> /dev/null; then
+    log_success "$component_name is already installed"
+    return 0
+  fi
+
+  # Check if user wants to install (respects flags and interactive mode)
+  if ! should_install "INSTALL_OPENCODE" "$component_name"; then
+    return 1
+  fi
+
+  log_info "Installing $component_name..."
+
+  # Install via Homebrew
+  brew install opencode || {
+    log_error "Failed to install $component_name via Homebrew"
+    return 1
+  }
+
+  log_success "$component_name installed successfully"
+  return 0
+}
+
+# Self-register for installation summary
+register_check "OpenCode CLI" "command -v opencode"
+```
+
+**Changes to install.sh:**
+```bash
+# Add flag (around line 28)
+INSTALL_OPENCODE=false
+
+# In parse_flags() (around line 80)
+      --opencode)
+        INSTALL_OPENCODE=true
+        ;;
+
+# In export list (line 101)
+export INSTALL_ALL INSTALL_BREW INSTALL_STOW INSTALL_TREE INSTALL_CLAUDE INSTALL_NEOVIM INSTALL_OPENCODE INSTALL_DOTFILES INSTALL_ZSHRC INTERACTIVE
+
+# In main() function (after other tool installations)
+  install_opencode || log_warn "Failed to install OpenCode"
+
+# In show_help() (add to OPTIONS section)
+  --opencode     Install OpenCode CLI
+```
+
+### Real Example 2: ripgrep (CLI Tool with Cross-Platform Support)
+
+Here's an example with cross-platform installation support:
 
 **deps/ripgrep.sh:**
 ```bash
