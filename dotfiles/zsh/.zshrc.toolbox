@@ -31,6 +31,9 @@ alias brewlist='brew list'
 # Shell refresh
 alias rr='refresh'
 
+# Toolbox
+alias tlbx='toolbox'
+
 # ===== Custom Functions =====
 
 # Quick navigation to toolbox repo
