@@ -65,8 +65,23 @@ set_default_wd() {
   fi
   
   # Create config directory if it doesn't exist
+  # First ensure parent directory exists
+  local parent_dir="${CWD_CONFIG_DIR%/*}"
+  if [[ ! -d "$parent_dir" ]]; then
+    mkdir -p "$parent_dir" || {
+      echo -e "${RED}Error: Could not create parent directory: $parent_dir${NC}" >&2
+      echo -e "${RED}Make sure you have write permissions in $HOME${NC}" >&2
+      return 1
+    }
+  fi
+
+  # Now create the config directory
   mkdir -p "$CWD_CONFIG_DIR" || {
     echo -e "${RED}Error: Could not create config directory: $CWD_CONFIG_DIR${NC}" >&2
+    echo -e "${RED}Details:${NC}" >&2
+    echo -e "${RED}  - Parent exists: [[ -d \"$parent_dir\" ]] = $([[ -d "$parent_dir" ]] && echo "yes" || echo "no")${NC}" >&2
+    echo -e "${RED}  - Config dir path: $CWD_CONFIG_DIR${NC}" >&2
+    echo -e "${RED}  - Check permissions with: ls -ld \"$parent_dir\"${NC}" >&2
     return 1
   }
   

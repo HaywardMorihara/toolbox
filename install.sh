@@ -22,6 +22,7 @@ done
 
 # Flag parsing
 INSTALL_ALL=false
+INSTALL_CONFIG=false
 INSTALL_BREW=false
 INSTALL_STOW=false
 INSTALL_TREE=false
@@ -42,6 +43,7 @@ Toolbox Installation Script - Install development dependencies and configuration
 
 OPTIONS:
   --all          Install all components non-interactively
+  --config       Create config directories (~/.config/toolbox)
   --brew         Install Homebrew
   --stow         Install GNU Stow
   --tree         Install tree command
@@ -69,6 +71,9 @@ parse_flags() {
       --all)
         INSTALL_ALL=true
         INTERACTIVE=false
+        ;;
+      --config)
+        INSTALL_CONFIG=true
         ;;
       --brew)
         INSTALL_BREW=true
@@ -113,7 +118,7 @@ parse_flags() {
     shift
   done
 
-  export INSTALL_ALL INSTALL_BREW INSTALL_STOW INSTALL_TREE INSTALL_CLAUDE INSTALL_NEOVIM INSTALL_OPENCODE INSTALL_GH INSTALL_DOTFILES INSTALL_ZSHRC INSTALL_UPDATE INTERACTIVE
+  export INSTALL_ALL INSTALL_CONFIG INSTALL_BREW INSTALL_STOW INSTALL_TREE INSTALL_CLAUDE INSTALL_NEOVIM INSTALL_OPENCODE INSTALL_GH INSTALL_DOTFILES INSTALL_ZSHRC INSTALL_UPDATE INTERACTIVE
 }
 
 # Parse flags
@@ -145,38 +150,41 @@ main() {
     log_success "Repository updated"
   fi
 
-  # 1. Install Homebrew (macOS package manager, prerequisite for other tools)
+  # 1. Setup config directories (needed by tools like cwd)
+  setup_config_dirs || log_warn "Failed to setup config directories"
+
+  # 2. Install Homebrew (macOS package manager, prerequisite for other tools)
   install_brew || {
     log_error "Homebrew installation failed. Cannot proceed."
     exit 1
   }
 
-  # 2. Install GNU Stow (required for dotfiles)
+  # 3. Install GNU Stow (required for dotfiles)
   install_stow || {
     log_error "GNU Stow installation failed. Cannot proceed."
     exit 1
   }
 
-  # 3. Install tree command
+  # 4. Install tree command
   install_tree || log_warn "Failed to install tree"
 
-  # 4. Install Claude CLI
+  # 5. Install Claude CLI
   install_claude || log_warn "Failed to install Claude CLI"
 
-   # 5. Install Neovim
-   install_neovim || log_warn "Failed to install Neovim"
+  # 6. Install Neovim
+  install_neovim || log_warn "Failed to install Neovim"
 
-   # 6. Install OpenCode CLI
-   install_opencode || log_warn "Failed to install OpenCode"
+  # 7. Install OpenCode CLI
+  install_opencode || log_warn "Failed to install OpenCode"
 
-   # 7. Install GitHub CLI
-   install_gh || log_warn "Failed to install GitHub CLI"
+  # 8. Install GitHub CLI
+  install_gh || log_warn "Failed to install GitHub CLI"
 
-   # 8. Stow dotfiles (creates ~/.zshrc.toolbox symlink)
-   stow_dotfiles "$REPO_ROOT" || log_warn "Failed to stow dotfiles"
+  # 9. Stow dotfiles (creates ~/.zshrc.toolbox symlink)
+  stow_dotfiles "$REPO_ROOT" || log_warn "Failed to stow dotfiles"
 
-   # 9. Modify ~/.zshrc (source ~/.zshrc.toolbox)
-   setup_zshrc_integration || log_warn "Failed to setup .zshrc integration"
+  # 10. Modify ~/.zshrc (source ~/.zshrc.toolbox)
+  setup_zshrc_integration || log_warn "Failed to setup .zshrc integration"
 
   # Summary
   show_installation_summary

@@ -60,18 +60,21 @@ This pattern eliminates manual tracking and ensures accurate status reporting.
   - Manages installation sequence with dependency ordering
   - Calls installation functions and displays summary
 
-- **lib/** - Core functionality
+- **lib/** - Core functionality and setup
   - `common.sh` - Shared utilities (logging, prompts, self-registering component system, file backup)
   - `os-detection.sh` - Platform detection ($OS, $PACKAGE_MANAGER variables)
   - `dotfiles.sh` - GNU Stow operations
   - `zsh-config.sh` - ~/.zshrc integration
+  - `config.sh` - Configuration directories setup (e.g., ~/.config/toolbox)
   - `mac/brew.sh` - Homebrew installation (macOS-specific)
+  - **Purpose**: System setup, configuration, and utility functions. Functions that set up the environment or manage configurations.
 
-- **deps/** - Dependency installers
-  - Each file contains a single `install_*()` function
+- **deps/** - External dependency installers
+  - Each file contains a single `install_*()` function for an external tool
   - Must call `register_check()` at module level
   - All files are auto-sourced by install.sh
   - Examples: `stow.sh`, `tree.sh`, `claude.sh`
+  - **Purpose**: Installing external packages/tools via package managers (brew, etc.)
 
 - **dotfiles/** - Stow-managed user configurations
   - Each subdirectory is a Stow package (e.g., `zsh/`, `git/`)
@@ -84,9 +87,10 @@ This pattern eliminates manual tracking and ensures accurate status reporting.
 2. **OS Detection** - `detect_os()` sets $OS and $PACKAGE_MANAGER
 3. **Auto-Sourcing** - All lib and deps scripts are sourced
 4. **Installation** - `main()` executes functions in dependency order:
+   - Config directories (~/.config/toolbox) - needed by tools like `cwd`
    - Homebrew (prerequisite for other tools)
    - GNU Stow (required for dotfiles)
-   - Individual tools (tree, Claude CLI)
+   - Individual tools (tree, Claude CLI, Neovim, OpenCode, GitHub CLI)
    - Dotfiles (creates symlinks via Stow)
    - Shell integration (sources .zshrc.toolbox from .zshrc)
 5. **Summary** - All registered checks are run and displayed
