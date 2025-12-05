@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
-CHEATSHEET_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/toolbox/cheatsheets"
+# Get script directory to find cheatsheets relative to repo
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(dirname "$SCRIPT_DIR")"
+CHEATSHEET_DIR="$REPO_ROOT/cheatsheets"
 
 if [[ $# -eq 0 ]]; then
   cat "$CHEATSHEET_DIR/bash.md"
