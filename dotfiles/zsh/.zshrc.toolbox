@@ -28,6 +28,9 @@ alias gp='git push'
 alias brewup='brew update && brew upgrade && brew cleanup'
 alias brewlist='brew list'
 
+# Shell refresh
+alias rr='refresh'
+
 # ===== Custom Functions =====
 
 # Quick navigation to toolbox repo
