@@ -142,6 +142,11 @@ Once in the file tree:
 - `.` - Toggle hidden files
 - `?` - Show help
 
+### Switching Between File Tree and Editor
+- `Ctrl+h` - Move cursor to file tree (from editor)
+- `Ctrl+l` - Move cursor to editor (from file tree)
+- `<leader>e` - Toggle file tree closed/open
+
 ## MODES
 
 | Mode | Enter | Exit |
