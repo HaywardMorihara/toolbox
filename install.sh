@@ -30,6 +30,7 @@ INSTALL_CLAUDE=false
 INSTALL_NEOVIM=false
 INSTALL_OPENCODE=false
 INSTALL_GH=false
+INSTALL_FONTS=false
 INSTALL_DOTFILES=false
 INSTALL_ZSHRC=false
 INSTALL_UPDATE=false
@@ -51,6 +52,7 @@ OPTIONS:
   --neovim       Install Neovim
   --opencode     Install OpenCode CLI
   --gh           Install GitHub CLI
+  --fonts        Install Hack Nerd Font
   --dotfiles     Stow dotfiles (symlink ~/.zshrc.toolbox)
   --zshrc        Modify ~/.zshrc to source toolbox config
   --update       Update toolbox repository (git pull)
@@ -96,6 +98,9 @@ parse_flags() {
       --gh)
         INSTALL_GH=true
         ;;
+      --fonts)
+        INSTALL_FONTS=true
+        ;;
       --dotfiles)
         INSTALL_DOTFILES=true
         ;;
@@ -118,7 +123,7 @@ parse_flags() {
     shift
   done
 
-  export INSTALL_ALL INSTALL_CONFIG INSTALL_BREW INSTALL_STOW INSTALL_TREE INSTALL_CLAUDE INSTALL_NEOVIM INSTALL_OPENCODE INSTALL_GH INSTALL_DOTFILES INSTALL_ZSHRC INSTALL_UPDATE INTERACTIVE
+  export INSTALL_ALL INSTALL_CONFIG INSTALL_BREW INSTALL_STOW INSTALL_TREE INSTALL_CLAUDE INSTALL_NEOVIM INSTALL_OPENCODE INSTALL_GH INSTALL_FONTS INSTALL_DOTFILES INSTALL_ZSHRC INSTALL_UPDATE INTERACTIVE
 }
 
 # Parse flags
@@ -180,10 +185,13 @@ main() {
   # 8. Install GitHub CLI
   install_gh || log_warn "Failed to install GitHub CLI"
 
-  # 9. Stow dotfiles (creates ~/.zshrc.toolbox symlink)
+  # 9. Install Hack Nerd Font
+  install_fonts || log_warn "Failed to install fonts"
+
+  # 10. Stow dotfiles (creates ~/.zshrc.toolbox symlink)
   stow_dotfiles "$REPO_ROOT" || log_warn "Failed to stow dotfiles"
 
-  # 10. Modify ~/.zshrc (source ~/.zshrc.toolbox)
+  # 11. Modify ~/.zshrc (source ~/.zshrc.toolbox)
   setup_zshrc_integration || log_warn "Failed to setup .zshrc integration"
 
   # Summary
