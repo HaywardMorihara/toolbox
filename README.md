@@ -13,6 +13,22 @@ source ~/.zshrc
 
 **Note:** You can clone the toolbox to any directory. The installation path is automatically detected and stored for shell functions to use. `~/toolbox` is just the recommended example location.
 
+## Mission
+
+A craftsman is only as good as their tools. This toolbox is a curated collection of tools, configurations, and scripts that travel with you across machines. It's your personal dev environment in version control.
+
+**Key principle:** Each tool has a "space cost." We ruthlessly prioritize what goes in this toolbox. Not every useful tool belongs here—only ones that meaningfully improve your workflow and justify their maintenance overhead.
+
+**With AI (LLMs):** The barrier to implementing useful automation has dropped dramatically. This makes it more viable to build custom tools and scripts tailored to your actual workflow, rather than relying on generic off-the-shelf solutions.
+
+## When Is It Worth Automating?
+
+Reference: [XKCD #1205: Is It Worth the Time?](https://xkcd.com/1205/)
+
+![XKCD: Is It Worth the Time?](docs/is_it_worth_the_time.png)
+
+The classic automation chart still applies, but remember: **with LLMs, the time cost of implementing automation has shifted left.** What wasn't worth automating last year might be very worth it now.
+
 ## What Gets Installed
 
 ### Core Dependencies
