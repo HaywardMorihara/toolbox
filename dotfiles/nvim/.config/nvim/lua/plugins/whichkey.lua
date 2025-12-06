@@ -10,16 +10,16 @@ return {
           separator = "➜",
           group = "+",
         },
-        window = {
+        win = {
           border = "rounded",
         },
       })
 
       -- Register keybinding groups for better documentation
-      wk.register({
-        ["<leader>f"] = { name = "+find" },
-        ["<leader>c"] = { name = "+code" },
-        ["<leader>r"] = { name = "+refactor" },
+      wk.add({
+        { "<leader>f", group = "find" },
+        { "<leader>c", group = "code" },
+        { "<leader>r", group = "refactor" },
       })
     end,
   },
