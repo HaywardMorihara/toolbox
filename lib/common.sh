@@ -129,3 +129,78 @@ should_install() {
   # Default: skip
   return 1
 }
+
+# Generic installer helper for standard package installations
+# Reduces boilerplate across deps/*.sh files
+#
+# Usage: install_with_brew "FLAG_NAME" "Component Name" "check_command" "package_name"
+#
+# Parameters:
+#   $1: FLAG_NAME - Environment variable name (e.g., INSTALL_TREE)
+#   $2: Component Name - Human-readable name for logging
+#   $3: check_command - Command to check if already installed (e.g., "command -v tree")
+#   $4: package_name - Package name for package manager
+#
+# This function:
+#   1. Checks if already installed (using check_command)
+#   2. Respects installation flags via should_install()
+#   3. Installs via OS-specific package manager (brew, apt, yum)
+#   4. Logs success or failure
+#   5. Returns 0 on success, 1 on skip or failure
+#
+# Example:
+#   install_tree() {
+#     install_with_brew "INSTALL_TREE" "tree" "command -v tree" "tree"
+#   }
+install_with_brew() {
+  local flag_name="$1"
+  local component_name="$2"
+  local check_cmd="$3"
+  local package_name="$4"
+
+  # Check if already installed
+  if eval "$check_cmd" &> /dev/null; then
+    log_success "$component_name is already installed"
+    return 0
+  fi
+
+  # Check if should install (respects --all, specific flags, and interactive mode)
+  if ! should_install "$flag_name" "$component_name"; then
+    return 1
+  fi
+
+  log_info "Installing $component_name..."
+
+  # Install based on OS
+  case "$OS" in
+    Darwin)
+      brew install "$package_name" || {
+        log_error "Failed to install $component_name"
+        return 1
+      }
+      ;;
+    Linux)
+      if command -v apt-get &> /dev/null; then
+        sudo apt-get install -y "$package_name" || {
+          log_error "Failed to install $component_name"
+          return 1
+        }
+      elif command -v yum &> /dev/null; then
+        sudo yum install -y "$package_name" || {
+          log_error "Failed to install $component_name"
+          return 1
+        }
+      else
+        log_error "No supported package manager found (apt-get or yum required)"
+        return 1
+      fi
+      ;;
+    *)
+      log_error "Unsupported OS: $OS"
+      return 1
+      ;;
+  esac
+
+  log_success "$component_name installed successfully"
+  return 0
+}
