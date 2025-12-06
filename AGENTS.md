@@ -81,6 +81,10 @@ This pattern eliminates manual tracking and ensures accurate status reporting.
   - Files use `.toolbox` suffix to avoid conflicts (e.g., `.zshrc.toolbox`)
   - Symlinked to home directory via Stow
 
+- **cheatsheets/** - Quick reference guides for common tasks
+  - Organized by topic (e.g., `git.md`, `bash.md`)
+  - Quick command references without extensive explanation
+
 ### Installation Flow
 
 1. **Flag Parsing** - `parse_flags()` converts CLI flags to boolean variables
