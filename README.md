@@ -5,11 +5,13 @@ My personal development toolbox - automated setup for development dependencies a
 ## Quick Start
 
 ```bash
-git clone https://github.com/HaywardMorihara/toolbox ~/development/toolbox
-cd ~/development/toolbox
+git clone https://github.com/HaywardMorihara/toolbox ~/toolbox  # Or any location you prefer
+cd ~/toolbox
 ./install.sh --all
 source ~/.zshrc
 ```
+
+**Note:** You can clone the toolbox to any directory. The installation path is automatically detected and stored for shell functions to use. `~/toolbox` is just the recommended example location.
 
 ## What Gets Installed
 

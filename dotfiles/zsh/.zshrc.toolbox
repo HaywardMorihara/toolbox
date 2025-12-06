@@ -2,6 +2,27 @@
 # Managed by: https://github.com/HaywardMorihara/toolbox
 # This file is symlinked from the toolbox repo and sourced by ~/.zshrc
 
+# ===== Toolbox Installation Path =====
+# Dynamically loaded from installation configuration
+TOOLBOX_INSTALL_PATH_FILE="${XDG_CONFIG_HOME:-$HOME/.config}/toolbox/install-path"
+
+if [[ -f "$TOOLBOX_INSTALL_PATH_FILE" ]]; then
+  TOOLBOX_ROOT="$(cat "$TOOLBOX_INSTALL_PATH_FILE")"
+
+  # Verify the path exists
+  if [[ ! -d "$TOOLBOX_ROOT" ]]; then
+    echo "Warning: Toolbox installation path no longer exists: $TOOLBOX_ROOT" >&2
+    echo "Run './install.sh --config' from your toolbox directory to update" >&2
+    TOOLBOX_ROOT=""
+  fi
+else
+  echo "Warning: Toolbox installation path not configured" >&2
+  echo "Run './install.sh --config' from your toolbox directory" >&2
+  TOOLBOX_ROOT=""
+fi
+
+unset TOOLBOX_INSTALL_PATH_FILE
+
 # ===== Path Configuration =====
 # Ensure local binaries are in PATH
 export PATH="$HOME/.local/bin:$PATH"
@@ -38,19 +59,31 @@ alias tlbx='toolbox'
 
 # Quick navigation to toolbox repo
 toolbox() {
-  cd "$HOME/development/toolbox" || return
+  if [[ -z "$TOOLBOX_ROOT" ]]; then
+    echo "Error: Toolbox installation path not configured" >&2
+    return 1
+  fi
+  cd "$TOOLBOX_ROOT" || return
 }
 
 # Manage default working directory
 # See: scripts/cwd.sh for implementation
 cwd() {
-  bash "$HOME/development/toolbox/scripts/cwd.sh" "$@"
+  if [[ -z "$TOOLBOX_ROOT" ]]; then
+    echo "Error: Toolbox installation path not configured" >&2
+    return 1
+  fi
+  bash "$TOOLBOX_ROOT/scripts/cwd.sh" "$@"
 }
 
 # Show cheatsheets
 # See: scripts/help.sh for implementation
 help() {
-  bash "$HOME/development/toolbox/scripts/help.sh" "$@"
+  if [[ -z "$TOOLBOX_ROOT" ]]; then
+    echo "Error: Toolbox installation path not configured" >&2
+    return 1
+  fi
+  bash "$TOOLBOX_ROOT/scripts/help.sh" "$@"
 }
 
 # Refresh shell configuration
@@ -61,8 +94,12 @@ refresh() {
 
 # Update toolbox repository
 toolbox-update() {
+  if [[ -z "$TOOLBOX_ROOT" ]]; then
+    echo "Error: Toolbox installation path not configured" >&2
+    return 1
+  fi
   echo "Updating toolbox..."
-  cd "$HOME/development/toolbox" || return
+  cd "$TOOLBOX_ROOT" || return
   git pull
   echo "Toolbox updated! Run './install.sh --all' to apply any new changes."
 }

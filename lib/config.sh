@@ -35,6 +35,28 @@ setup_config_dirs() {
   }
 
   log_success "$component_name created successfully"
+
+  # Store the installation path for later use by shell functions
+  store_install_path || {
+    log_warn "Failed to store installation path"
+  }
+
+  return 0
+}
+
+# Store the toolbox installation path in config directory
+# This allows shell functions to find the toolbox repo regardless of installation location
+store_install_path() {
+  local config_home="${XDG_CONFIG_HOME:-$HOME/.config}"
+  local toolbox_config_dir="$config_home/toolbox"
+  local install_path_file="$toolbox_config_dir/install-path"
+
+  # Write current REPO_ROOT to install-path file
+  echo "$REPO_ROOT" > "$install_path_file" || {
+    log_error "Failed to write installation path to $install_path_file"
+    return 1
+  }
+
   return 0
 }
 

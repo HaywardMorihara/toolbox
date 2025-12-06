@@ -97,7 +97,7 @@ show_installation_summary() {
   echo ""
   log_info "Next steps:"
   log_info "  1. Reload your shell: source ~/.zshrc"
-  log_info "  2. Customize configs: cd ~/development/toolbox"
+  log_info "  2. Customize configs: cd $REPO_ROOT"
 }
 
 # Helper to check if component should be installed
