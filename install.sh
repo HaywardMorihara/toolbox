@@ -5,18 +5,43 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$SCRIPT_DIR"
 
+# Validate repository structure exists
+if [[ ! -d "$REPO_ROOT/lib" ]]; then
+  echo "ERROR: Repository structure invalid. Missing lib directory at: $REPO_ROOT/lib" >&2
+  exit 1
+fi
+
+if [[ ! -d "$REPO_ROOT/deps" ]]; then
+  echo "ERROR: Repository structure invalid. Missing deps directory at: $REPO_ROOT/deps" >&2
+  exit 1
+fi
+
 # Source all library functions automatically
 for script in "$SCRIPT_DIR"/lib/*.sh; do
+  if [[ ! -r "$script" ]]; then
+    echo "ERROR: Cannot read library script: $script" >&2
+    exit 1
+  fi
   source "$script"
 done
 
 # Source Mac-specific library functions
-for script in "$SCRIPT_DIR"/lib/mac/*.sh; do
-  source "$script"
-done
+if [[ -d "$SCRIPT_DIR/lib/mac" ]]; then
+  for script in "$SCRIPT_DIR"/lib/mac/*.sh; do
+    if [[ ! -r "$script" ]]; then
+      echo "ERROR: Cannot read library script: $script" >&2
+      exit 1
+    fi
+    source "$script"
+  done
+fi
 
 # Source all dependency scripts automatically
 for script in "$SCRIPT_DIR"/deps/*.sh; do
+  if [[ ! -r "$script" ]]; then
+    echo "ERROR: Cannot read dependency script: $script" >&2
+    exit 1
+  fi
   source "$script"
 done
 
@@ -143,6 +168,23 @@ fi
 # Installation sequence (dependency order)
 main() {
   log_info "====== Toolbox Installation Starting ======"
+
+  # Validate basic requirements
+  log_info "Validating environment..."
+
+  # Check REPO_ROOT is set and exists
+  if ! validate_var_set "REPO_ROOT"; then
+    exit 1
+  fi
+
+  if ! validate_dir_exists "$REPO_ROOT" "Repository root"; then
+    exit 1
+  fi
+
+  # Check HOME directory exists and is writable
+  if ! validate_dir_exists "$HOME" "Home directory"; then
+    exit 1
+  fi
 
   # Pull latest changes if --update flag is set
   if [[ "$INSTALL_UPDATE" == true ]]; then

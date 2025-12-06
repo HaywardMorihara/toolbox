@@ -12,10 +12,25 @@ setup_zshrc_integration() {
     return 1
   fi
 
+  # Validate home directory is writable
+  if ! validate_dir_writable "$HOME" "Home directory"; then
+    log_error "Cannot modify ~/.zshrc without write permission in home directory"
+    return 1
+  fi
+
   # Create ~/.zshrc if it doesn't exist
   if [[ ! -f "$zshrc" ]]; then
     log_info "Creating new ~/.zshrc"
-    touch "$zshrc"
+    if ! touch "$zshrc"; then
+      log_error "Failed to create ~/.zshrc (permission denied)"
+      return 1
+    fi
+  fi
+
+  # Validate ~/.zshrc is writable if it exists
+  if [[ -f "$zshrc" ]] && [[ ! -w "$zshrc" ]]; then
+    log_error "Cannot modify ~/.zshrc (permission denied or read-only)"
+    return 1
   fi
 
   # Check if already integrated (idempotency)
@@ -35,12 +50,16 @@ setup_zshrc_integration() {
 
   # Append source line
   log_info "Adding toolbox integration to ~/.zshrc"
-  cat >> "$zshrc" << 'EOF'
+  if ! cat >> "$zshrc" << 'EOF'
 
 # Toolbox: Load custom development configurations
 # Managed by: https://github.com/HaywardMorihara/toolbox
 source ~/.zshrc.toolbox
 EOF
+  then
+    log_error "Failed to append to ~/.zshrc (permission denied or write error)"
+    return 1
+  fi
 
   log_success "~/.zshrc updated successfully"
   log_info "Reload your shell: source ~/.zshrc"

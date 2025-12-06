@@ -61,6 +61,8 @@ set_default_wd() {
   # Resolve to absolute path
   if ! target_path="$(cd "$target_path" && pwd)"; then
     echo -e "${RED}Error: Cannot access directory: $1${NC}" >&2
+    echo -e "${RED}Reason: Path does not exist or permission denied${NC}" >&2
+    echo -e "${RED}Suggestion: Verify the path is correct: ls -d \"$1\"${NC}" >&2
     return 1
   fi
   

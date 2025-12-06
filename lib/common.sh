@@ -65,6 +65,72 @@ backup_file() {
   fi
 }
 
+# Input validation helpers
+# =======================
+
+# Validate that a file exists and is readable
+validate_file_exists() {
+  local file_path="$1"
+  local file_description="${2:-file}"
+
+  if [[ ! -f "$file_path" ]]; then
+    log_error "Failed: $file_description not found at: $file_path"
+    return 1
+  fi
+
+  if [[ ! -r "$file_path" ]]; then
+    log_error "Failed: Cannot read $file_description (permission denied): $file_path"
+    return 1
+  fi
+
+  return 0
+}
+
+# Validate that a directory exists
+validate_dir_exists() {
+  local dir_path="$1"
+  local dir_description="${2:-directory}"
+
+  if [[ ! -d "$dir_path" ]]; then
+    log_error "Failed: $dir_description not found at: $dir_path"
+    return 1
+  fi
+
+  return 0
+}
+
+# Validate that a directory is writable
+validate_dir_writable() {
+  local dir_path="$1"
+  local dir_description="${2:-directory}"
+
+  if [[ ! -d "$dir_path" ]]; then
+    log_error "Failed: $dir_description not found at: $dir_path"
+    return 1
+  fi
+
+  if [[ ! -w "$dir_path" ]]; then
+    log_error "Failed: Cannot write to $dir_description (permission denied): $dir_path"
+    log_error "Suggestion: Check directory ownership or permissions"
+    return 1
+  fi
+
+  return 0
+}
+
+# Validate required environment variable is set
+validate_var_set() {
+  local var_name="$1"
+  local var_value="${!var_name:-}"
+
+  if [[ -z "$var_value" ]]; then
+    log_error "Failed: Required environment variable not set: \$$var_name"
+    return 1
+  fi
+
+  return 0
+}
+
 # Self-registering component system (bash 3.2 compatible)
 # Use parallel arrays instead of associative arrays
 INSTALL_CHECK_NAMES=()
