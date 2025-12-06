@@ -119,6 +119,10 @@ See [docs/EXTENDING.md](docs/EXTENDING.md) for detailed instructions on:
 - Adding new dotfile configurations
 - Understanding the self-registering component system
 
+### Tool Graduation
+
+As tools grow and mature, they can graduate into standalone repositories if they're stable, well-documented, and solve a general problem worth sharing. The toolbox serves as an incubator—not everything needs to stay here forever.
+
 ## Safety Features
 
 - **Idempotent** - Safe to re-run installation multiple times
