@@ -8,35 +8,36 @@ setup_config_dirs() {
   local config_home="${XDG_CONFIG_HOME:-$HOME/.config}"
   local toolbox_config_dir="$config_home/toolbox"
 
+  local dir_exists=false
   if [[ -d "$toolbox_config_dir" ]]; then
     log_success "$component_name already exists"
-    return 0
-  fi
+    dir_exists=true
+  else
+    if ! should_install "INSTALL_CONFIG" "$component_name"; then
+      return 1
+    fi
 
-  if ! should_install "INSTALL_CONFIG" "$component_name"; then
-    return 1
-  fi
+    log_info "Creating config directories..."
 
-  log_info "Creating config directories..."
+    # Create parent ~/.config if needed
+    if [[ ! -d "$config_home" ]]; then
+      mkdir -p "$config_home" || {
+        log_error "Failed to create config home: $config_home"
+        log_error "Make sure you have write permissions in $HOME"
+        return 1
+      }
+    fi
 
-  # Create parent ~/.config if needed
-  if [[ ! -d "$config_home" ]]; then
-    mkdir -p "$config_home" || {
-      log_error "Failed to create config home: $config_home"
-      log_error "Make sure you have write permissions in $HOME"
+    # Create ~/.config/toolbox
+    mkdir -p "$toolbox_config_dir" || {
+      log_error "Failed to create toolbox config directory: $toolbox_config_dir"
       return 1
     }
+
+    log_success "$component_name created successfully"
   fi
 
-  # Create ~/.config/toolbox
-  mkdir -p "$toolbox_config_dir" || {
-    log_error "Failed to create toolbox config directory: $toolbox_config_dir"
-    return 1
-  }
-
-  log_success "$component_name created successfully"
-
-  # Store the installation path for later use by shell functions
+  # Always store the installation path (even if directory already existed)
   store_install_path || {
     log_warn "Failed to store installation path"
   }
