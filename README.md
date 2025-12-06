@@ -200,6 +200,16 @@ This toolbox focuses on:
 - **Clarity** - Explicit installation order, no magic auto-detection
 - **Cross-platform ready** - Structure supports future Linux support (V4+)
 
+### Iterative Tool Development
+
+When adding new tools or scripts:
+- **Start with V1** - Build the simplest version that solves one specific problem
+- **Make it work first** - Don't over-engineer or add "future" features
+- **Then iterate** - Once V1 is working, gradually add features and make it more generic
+- **Avoid scope creep** - Resist the temptation to make tools ambitious from the start
+
+This keeps development fast and prevents tools from becoming bloated before they're even useful.
+
 ## Inspiration
 
 - [joe.sh/terminal-tools](https://joe.sh/terminal-tools) - Philosophy and approach
