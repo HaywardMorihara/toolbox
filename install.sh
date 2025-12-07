@@ -16,8 +16,19 @@ if [[ ! -d "$REPO_ROOT/deps" ]]; then
   exit 1
 fi
 
-# Source all library functions automatically
+# Source common.sh first (provides shared utilities needed by other modules)
+if [[ ! -r "$SCRIPT_DIR/lib/common.sh" ]]; then
+  echo "ERROR: Cannot read library script: $SCRIPT_DIR/lib/common.sh" >&2
+  exit 1
+fi
+source "$SCRIPT_DIR/lib/common.sh"
+
+# Source remaining library functions automatically
 for script in "$SCRIPT_DIR"/lib/*.sh; do
+  # Skip common.sh since we already sourced it
+  if [[ "$(basename "$script")" == "common.sh" ]]; then
+    continue
+  fi
   if [[ ! -r "$script" ]]; then
     echo "ERROR: Cannot read library script: $script" >&2
     exit 1
@@ -58,6 +69,7 @@ INSTALL_GH=false
 INSTALL_FONTS=false
 INSTALL_DOTFILES=false
 INSTALL_ZSHRC=false
+INSTALL_AI_INSTRUCTIONS=false
 INSTALL_UPDATE=false
 INTERACTIVE=true
 
@@ -80,6 +92,7 @@ OPTIONS:
   --fonts        Install Hack Nerd Font
   --dotfiles     Stow dotfiles (symlink ~/.zshrc.toolbox)
   --zshrc        Modify ~/.zshrc to source toolbox config
+  --ai-instructions   Setup AI instructions for Claude Code and OpenCode
   --update       Update toolbox repository (git pull)
   -h, --help     Show this help message
 
@@ -132,6 +145,9 @@ parse_flags() {
       --zshrc)
         INSTALL_ZSHRC=true
         ;;
+      --ai-instructions)
+        INSTALL_AI_INSTRUCTIONS=true
+        ;;
       --update)
         INSTALL_UPDATE=true
         ;;
@@ -148,7 +164,7 @@ parse_flags() {
     shift
   done
 
-  export INSTALL_ALL INSTALL_CONFIG INSTALL_BREW INSTALL_STOW INSTALL_TREE INSTALL_CLAUDE INSTALL_NEOVIM INSTALL_OPENCODE INSTALL_GH INSTALL_FONTS INSTALL_DOTFILES INSTALL_ZSHRC INSTALL_UPDATE INTERACTIVE
+  export INSTALL_ALL INSTALL_CONFIG INSTALL_BREW INSTALL_STOW INSTALL_TREE INSTALL_CLAUDE INSTALL_NEOVIM INSTALL_OPENCODE INSTALL_GH INSTALL_FONTS INSTALL_DOTFILES INSTALL_ZSHRC INSTALL_AI_INSTRUCTIONS INSTALL_UPDATE INTERACTIVE
 }
 
 # Parse flags
@@ -233,7 +249,10 @@ main() {
   # 10. Stow dotfiles (creates ~/.zshrc.toolbox symlink)
   stow_dotfiles "$REPO_ROOT" || log_warn "Failed to stow dotfiles"
 
-  # 11. Modify ~/.zshrc (source ~/.zshrc.toolbox)
+  # 11. Setup AI instructions (symlinks to Claude and OpenCode)
+  setup_ai_instructions || log_warn "Failed to setup AI instructions"
+
+  # 12. Modify ~/.zshrc (source ~/.zshrc.toolbox)
   setup_zshrc_integration || log_warn "Failed to setup .zshrc integration"
 
   # Summary
