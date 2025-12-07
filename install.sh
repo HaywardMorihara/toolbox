@@ -56,6 +56,7 @@ INSTALL_NEOVIM=false
 INSTALL_OPENCODE=false
 INSTALL_GH=false
 INSTALL_FONTS=false
+INSTALL_PANDOC=false
 INSTALL_DOTFILES=false
 INSTALL_ZSHRC=false
 INSTALL_UPDATE=false
@@ -78,6 +79,7 @@ OPTIONS:
   --opencode     Install OpenCode CLI
   --gh           Install GitHub CLI
   --fonts        Install Hack Nerd Font
+  --pandoc       Install Pandoc document converter
   --dotfiles     Stow dotfiles (symlink ~/.zshrc.toolbox)
   --zshrc        Modify ~/.zshrc to source toolbox config
   --update       Update toolbox repository (git pull)
@@ -126,6 +128,9 @@ parse_flags() {
       --fonts)
         INSTALL_FONTS=true
         ;;
+      --pandoc)
+        INSTALL_PANDOC=true
+        ;;
       --dotfiles)
         INSTALL_DOTFILES=true
         ;;
@@ -148,7 +153,7 @@ parse_flags() {
     shift
   done
 
-  export INSTALL_ALL INSTALL_CONFIG INSTALL_BREW INSTALL_STOW INSTALL_TREE INSTALL_CLAUDE INSTALL_NEOVIM INSTALL_OPENCODE INSTALL_GH INSTALL_FONTS INSTALL_DOTFILES INSTALL_ZSHRC INSTALL_UPDATE INTERACTIVE
+  export INSTALL_ALL INSTALL_CONFIG INSTALL_BREW INSTALL_STOW INSTALL_TREE INSTALL_CLAUDE INSTALL_NEOVIM INSTALL_OPENCODE INSTALL_GH INSTALL_FONTS INSTALL_PANDOC INSTALL_DOTFILES INSTALL_ZSHRC INSTALL_UPDATE INTERACTIVE
 }
 
 # Parse flags
@@ -230,10 +235,13 @@ main() {
   # 9. Install Hack Nerd Font
   install_fonts || log_warn "Failed to install fonts"
 
-  # 10. Stow dotfiles (creates ~/.zshrc.toolbox symlink)
+  # 10. Install Pandoc
+  install_pandoc || log_warn "Failed to install Pandoc"
+
+  # 11. Stow dotfiles (creates ~/.zshrc.toolbox symlink)
   stow_dotfiles "$REPO_ROOT" || log_warn "Failed to stow dotfiles"
 
-  # 11. Modify ~/.zshrc (source ~/.zshrc.toolbox)
+  # 12. Modify ~/.zshrc (source ~/.zshrc.toolbox)
   setup_zshrc_integration || log_warn "Failed to setup .zshrc integration"
 
   # Summary

@@ -14,7 +14,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ./install.sh
 
 # Install specific components
-./install.sh --brew --stow --tree --claude --dotfiles --zshrc
+./install.sh --brew --stow --tree --claude --pandoc --dotfiles --zshrc
 
 # Show help
 ./install.sh --help
@@ -85,6 +85,12 @@ This pattern eliminates manual tracking and ensures accurate status reporting.
   - Organized by topic (e.g., `git.md`, `bash.md`)
   - Quick command references without extensive explanation
 
+- **scripts/** - Utility scripts for toolbox commands
+  - Independent bash scripts for complex command implementations
+  - Called as wrappers from shell functions in dotfiles
+  - Examples: `markdown.sh` for the `md` command, `cwd.sh` for the `cwd` command
+  - **Purpose**: Keep shell config files (dotfiles) simple and readable. Complex logic belongs in scripts.
+
 ### Installation Flow
 
 1. **Flag Parsing** - `parse_flags()` converts CLI flags to boolean variables
@@ -94,7 +100,7 @@ This pattern eliminates manual tracking and ensures accurate status reporting.
    - Config directories (~/.config/toolbox) - needed by tools like `cwd`
    - Homebrew (prerequisite for other tools)
    - GNU Stow (required for dotfiles)
-   - Individual tools (tree, Claude CLI, Neovim, OpenCode, GitHub CLI)
+   - Individual tools (tree, Claude CLI, Neovim, OpenCode, GitHub CLI, Pandoc)
    - Dotfiles (creates symlinks via Stow)
    - Shell integration (sources .zshrc.toolbox from .zshrc)
 5. **Summary** - All registered checks are run and displayed
@@ -200,6 +206,38 @@ backup_file "/path/to/file"     # Backup with timestamp
 should_install "FLAG_NAME" "component name"  # Respects flags + interactive mode
 register_check "Name" "check command"        # Register for summary (call at module level!)
 show_installation_summary                    # Display all checks
+```
+
+## Shell Configuration Best Practices
+
+**Keep dotfiles (.zshrc.toolbox, etc.) simple and readable:**
+
+- **Shell config files should only contain:**
+  - Simple environment setup and exports
+  - Aliases for common commands
+  - Simple function wrappers (1-5 lines) that delegate to scripts
+
+- **Complex logic belongs in scripts/:**
+  - Multi-line functions with loops, conditionals, or file operations
+  - Functions that do significant processing or have many lines of code
+  - Always call scripts via wrappers: `bash "$TOOLBOX_ROOT/scripts/scriptname.sh" "$@"`
+
+- **Why:**
+  - Shell config files are sourced on every shell start (performance)
+  - Shell config should be quickly scannable and understandable
+  - Complex logic is easier to debug and maintain in dedicated scripts
+  - Scripts can be tested and executed independently
+
+**Example pattern:**
+```bash
+# In .zshrc.toolbox (KEEP SIMPLE - just a wrapper)
+md() {
+  bash "$TOOLBOX_ROOT/scripts/markdown.sh" "$@"
+}
+
+# In scripts/markdown.sh (COMPLEX LOGIC GOES HERE)
+#!/usr/bin/env bash
+# Full implementation with all the logic
 ```
 
 ## Updating Documentation After install.sh Changes

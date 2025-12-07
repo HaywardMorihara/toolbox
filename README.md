@@ -41,12 +41,75 @@ The classic automation chart still applies, but remember: **with LLMs, the time 
 - **Neovim** - Modern text editor (with lazy.nvim plugin manager)
 - **OpenCode CLI** - OpenCode editor CLI
 - **GitHub CLI (gh)** - GitHub command-line interface
+- **Pandoc** - Universal document converter (Markdown to HTML, etc.)
 
 ### Configurations
 - **~/.zshrc.toolbox** - Custom Zsh config (symlinked via Stow)
 - **~/.config/nvim/** - Neovim configuration with lazy.nvim
 - **~/.config/toolbox/cheatsheets/** - Quick reference guides
 - **~/.zshrc** - Modified to source ~/.zshrc.toolbox
+
+## Code Dependencies
+
+```mermaid
+graph LR
+    subgraph "Core Installation"
+        install["install.sh<br/>(main orchestrator)"]
+    end
+
+    subgraph "Library Functions"
+        common["lib/common.sh<br/>(logging, prompts,<br/>registration)"]
+        osdetect["lib/os-detection.sh<br/>(OS detection)"]
+        config["lib/config.sh<br/>(config dirs)"]
+        dotfiles["lib/dotfiles.sh<br/>(stow operations)"]
+        zshconf["lib/zsh-config.sh<br/>(shell integration)"]
+        brew["lib/mac/brew.sh<br/>(Homebrew setup)"]
+    end
+
+    subgraph "Tool Installers"
+        deps["deps/*.sh<br/>(tree, claude,<br/>neovim, gh, pandoc)"]
+    end
+
+    subgraph "Shell Configuration"
+        zshrc[".zshrc.toolbox<br/>(shell config)"]
+    end
+
+    subgraph "Scripts"
+        markdown["scripts/markdown.sh<br/>(Markdown viewer)"]
+        cwd["scripts/cwd.sh<br/>(dir management)"]
+        help["scripts/help.sh<br/>(help system)"]
+    end
+
+    subgraph "Dotfiles"
+        nvim["nvim config"]
+        cheatsheets["cheatsheets"]
+    end
+
+    install -->|sources| common
+    install -->|sources| osdetect
+    install -->|sources| config
+    install -->|sources| dotfiles
+    install -->|sources| zshconf
+    install -->|sources| brew
+    install -->|sources| deps
+
+    brew -->|uses| common
+    brew -->|uses| osdetect
+    deps -->|uses| common
+    deps -->|uses| osdetect
+    dotfiles -->|uses| common
+    zshconf -->|uses| common
+
+    zshrc -->|calls| markdown
+    zshrc -->|calls| cwd
+    zshrc -->|calls| help
+
+    markdown -->|requires| pandoc["Pandoc<br/>(installed by deps)"]
+
+    install -->|stows| nvim
+    install -->|stows| cheatsheets
+    install -->|integrates| zshrc
+```
 
 ## Installation Options
 
@@ -72,6 +135,7 @@ Prompts for each component, allowing you to pick and choose.
 ```bash
 ./install.sh --brew --stow --tree          # Install specific components
 ./install.sh --claude --neovim --gh        # Install dev tools
+./install.sh --pandoc                      # Install Markdown viewer tools
 ./install.sh --dotfiles --zshrc            # Just setup dotfiles
 ```
 
@@ -86,6 +150,7 @@ Prompts for each component, allowing you to pick and choose.
 - `--neovim` - Install Neovim
 - `--opencode` - Install OpenCode CLI
 - `--gh` - Install GitHub CLI
+- `--pandoc` - Install Pandoc document converter
 - `--dotfiles` - Stow dotfiles (symlink ~/.zshrc.toolbox, nvim config, cheatsheets)
 - `--zshrc` - Modify ~/.zshrc to source toolbox config
 - `-h, --help` - Show help message
@@ -99,6 +164,7 @@ refresh            # Reload shell configuration (no need to source ~/.zshrc manu
 toolbox            # Navigate to toolbox repository
 toolbox-update     # Pull latest changes from git
 cwd                # Set current directory as the default working directory
+md                 # View Markdown files in your browser
 ```
 
 New terminal tabs will automatically switch to your default working directory.
@@ -173,7 +239,8 @@ toolbox/
 │   ├── claude.sh           # Claude CLI
 │   ├── neovim.sh           # Neovim editor
 │   ├── opencode.sh         # OpenCode CLI
-│   └── gh.sh               # GitHub CLI
+│   ├── gh.sh               # GitHub CLI
+│   └── pandoc.sh           # Pandoc document converter
 │
 ├── dotfiles/               # Stow-managed dotfiles
 │   ├── zsh/
@@ -183,9 +250,10 @@ toolbox/
 │   └── cheatsheets/
 │       └── .config/toolbox/cheatsheets/  # Reference guides
 │
-├── scripts/                # Utility scripts
-│   ├── help.sh             # Help information
-│   └── cwd.sh              # Working directory management
+├── scripts/                # Utility scripts (complex command logic)
+│   ├── help.sh             # Help/cheatsheet display
+│   ├── cwd.sh              # Working directory management
+│   └── markdown.sh         # Markdown viewer
 │
 └── docs/                   # Documentation
     └── EXTENDING.md        # Extension guide

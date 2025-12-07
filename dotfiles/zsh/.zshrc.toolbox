@@ -113,6 +113,19 @@ brew-installed() {
   brew list --cask
 }
 
+# View Markdown files in the browser
+# Wrapper for scripts/markdown.sh
+# Usage: md [OPTIONS] <file.md>
+# Options:
+#   --keep, -k    Keep the generated HTML file instead of auto-deleting
+md() {
+  if [[ -z "$TOOLBOX_ROOT" ]]; then
+    echo "Error: Toolbox installation path not configured" >&2
+    return 1
+  fi
+  bash "$TOOLBOX_ROOT/scripts/markdown.sh" "$@"
+}
+
 # ===== Environment Variables =====
 # Add tool-specific environment variables here
 
