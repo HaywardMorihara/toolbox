@@ -169,6 +169,32 @@ md                 # View Markdown files in your browser
 
 New terminal tabs will automatically switch to your default working directory.
 
+## Private Commands
+
+Want to add your own custom commands without committing them to the repository? Use the `private/` directory!
+
+All `.sh` files in the `private/` directory are automatically sourced when your shell starts, but they're git-ignored and never committed. Perfect for:
+- Work-specific shortcuts
+- Personal aliases
+- Commands with sensitive paths
+
+**Example:** Create `private/commands.sh`:
+```bash
+# Navigate to your work project
+myproject() {
+  cd ~/work/myproject || return
+}
+
+# Quick SSH to your dev server
+devssh() {
+  ssh user@dev-server.example.com
+}
+```
+
+After creating the file, run `refresh` and your commands will be available!
+
+See `private/README.md` for more examples and tips.
+
 ## Customizing Your Config
 
 Edit the custom Zsh configuration:
@@ -254,6 +280,9 @@ toolbox/
 │   ├── help.sh             # Help/cheatsheet display
 │   ├── cwd.sh              # Working directory management
 │   └── markdown.sh         # Markdown viewer
+│
+├── private/                # Private commands (git-ignored)
+│   └── README.md           # Instructions and examples
 │
 └── docs/                   # Documentation
     └── EXTENDING.md        # Extension guide

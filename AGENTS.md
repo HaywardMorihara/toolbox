@@ -254,6 +254,50 @@ register_check "Name" "check command"        # Register for summary (call at mod
 show_installation_summary                    # Display all checks
 ```
 
+## Private Commands
+
+The `private/` directory allows users to add custom commands without committing them to the repository. All `.sh` files in this directory are automatically sourced when the shell starts.
+
+**Key features:**
+- Git-ignored (never committed)
+- Auto-loaded on shell startup
+- Perfect for work-specific shortcuts or commands with sensitive paths
+
+**Location:** `private/`
+
+**File naming:** Any `.sh` file (e.g., `commands.sh`, `work.sh`)
+
+**Example (`private/commands.sh`):**
+```bash
+# Navigate to your work project
+myproject() {
+  cd ~/work/myproject || return
+}
+
+# Quick SSH to dev server
+devssh() {
+  ssh user@dev-server.example.com
+}
+```
+
+**How it works:**
+The `.zshrc.toolbox` file includes this section:
+```bash
+# ===== Private Commands (local only) =====
+# Source user-defined private commands if they exist
+if [[ -n "$TOOLBOX_ROOT" && -d "$TOOLBOX_ROOT/private" ]]; then
+  # Use nullglob to prevent errors when no .sh files exist
+  setopt local_options null_glob
+  for private_file in "$TOOLBOX_ROOT/private"/*.sh; do
+    [[ -f "$private_file" ]] && source "$private_file"
+  done
+  unset private_file
+fi
+```
+
+**Testing:**
+After creating a private command file, run `refresh` to reload the shell config.
+
 ## Shell Configuration Best Practices
 
 **Keep dotfiles (.zshrc.toolbox, etc.) simple and readable:**

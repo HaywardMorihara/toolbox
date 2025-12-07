@@ -147,6 +147,18 @@ if [[ $- == *i* ]]; then
   unset DEFAULT_WD_FILE DEFAULT_WD
 fi
 
+# ===== Private Commands (local only) =====
+# Source user-defined private commands if they exist
+# Files in private/ are git-ignored and never committed
+if [[ -n "$TOOLBOX_ROOT" && -d "$TOOLBOX_ROOT/private" ]]; then
+  # Use nullglob to prevent errors when no .sh files exist
+  setopt local_options null_glob
+  for private_file in "$TOOLBOX_ROOT/private"/*.sh; do
+    [[ -f "$private_file" ]] && source "$private_file"
+  done
+  unset private_file
+fi
+
 # ===== Welcome Message (optional) =====
 # Uncomment to show a message when opening new terminal
 # echo "Toolbox loaded! Run 'toolbox' to navigate to repo."

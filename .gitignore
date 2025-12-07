@@ -1,0 +1,7 @@
+# Private user commands (local only)
+# Ignore all files in private/ except README.md
+private/*
+!private/README.md
+
+# Git worktrees directory
+.worktrees/
