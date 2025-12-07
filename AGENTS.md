@@ -35,6 +35,52 @@ bash -x ./install.sh --all
 ./install.sh --your-flag
 ```
 
+### Worktree Workflow (Multi-Agent Development)
+
+When multiple agents need to work on different features simultaneously, use git worktrees to avoid conflicts. Worktrees are **opt-in only** — explicitly request them when needed, not by default.
+
+**When to use worktrees:**
+- Multiple agents working on different features at the same time
+- You want to keep changes isolated and avoid merging branches locally until ready
+- You need the primary repo to remain clean for quick context switches
+
+**Basic workflow:**
+
+```bash
+# 1. Create a new worktree for a feature
+./scripts/worktree.sh create feature/my-feature
+
+# 2. Navigate to the worktree and work
+cd .worktrees/my-feature
+# ... make changes, commit, test ...
+
+# 3. When done: pull latest main, push, remove worktree, and update primary repo
+./scripts/worktree.sh cleanup .worktrees/my-feature
+```
+
+**Available commands:**
+
+```bash
+# Create a new worktree for a branch
+./scripts/worktree.sh create <branch_name>
+
+# Finalize changes: pull main → push → remove worktree → pull main in primary repo
+./scripts/worktree.sh cleanup <worktree_path>
+
+# List all active worktrees
+./scripts/worktree.sh list
+
+# Find orphaned worktrees (optional, only when needed)
+./scripts/worktree.sh cleanup-orphaned          # List orphaned worktrees
+./scripts/worktree.sh cleanup-orphaned --remove # Remove orphaned worktrees
+```
+
+**Important notes:**
+- Worktrees are stored in `.worktrees/` (git-ignored, local only)
+- Each worktree is a **separate directory** with its own checkout
+- The `cleanup` command handles the complete workflow: pull → push → remove
+- Only use `cleanup-orphaned` if worktrees are stuck or the primary repo is in an inconsistent state
+
 ## Architecture Overview
 
 ### Self-Registering Component System
