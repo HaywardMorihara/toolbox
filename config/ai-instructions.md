@@ -64,3 +64,16 @@ Keep commit descriptions concise and focused:
 - Use the first line as a clear, short summary (imperative mood: "Add", "Fix", "Update", not "Added", "Fixed")
 - Keep the message focused on *why* the change was made, not just *what* changed
 - If the description needs to be longer than 20 lines, it likely means the commit is doing too much—consider breaking it into smaller commits
+
+## Comment Writing Guidelines
+
+Write comments that explain **why** code exists, not **what** it does:
+- Avoid low-value comments that merely restate the code (e.g., `// set x to 5` above `x = 5`)
+- Focus on:
+  - Non-obvious logic or decisions
+  - Edge cases and gotchas
+  - Workarounds and why they're necessary
+  - Complex algorithms or interactions
+  - Important context that isn't immediately clear from code
+
+This keeps comments valuable and reduces noise in the codebase.
