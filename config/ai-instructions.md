@@ -31,6 +31,23 @@ Before marking a task as complete, committing changes, or asking for a final rev
 
 Only commit, push, and declare the task done once you're confident all changes are necessary and the code is truly ready.
 
+## Unit Testing Guidelines
+
+Structure unit tests with the **Arrange-Act-Assert** pattern:
+
+```javascript
+// Arrange
+const inputValue = 5;
+
+// Act
+const result = double(inputValue);
+
+// Assert
+expect(result).toBe(10);
+```
+
+This pattern makes tests self-documenting and easier to understand.
+
 ## Commit Message Guidelines
 
 Keep commit descriptions concise and focused:
