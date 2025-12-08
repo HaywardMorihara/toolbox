@@ -15,6 +15,15 @@ Common commands:
 
 When you need information about GitHub state, always query it using `gh` commands rather than assuming the current state.
 
+## Addressing GitHub PR Comments
+
+When responding to PR feedback, check for both general and inline comments:
+
+- **General PR comments**: Review comments on the PR itself using `gh pr view <number>`
+- **Inline comments**: Review code-level comments left on specific lines using `gh api repos/<owner>/<repo>/pulls/<number>/comments`
+
+Both types of comments need to be addressed before marking a PR as ready. Inline comments (left on specific code lines during review) are easy to miss but are critical feedback that must be incorporated.
+
 ## Final Code Review Before Declaring Tasks Done
 
 Before marking a task as complete, committing changes, or asking for a final review, perform a thorough final code review:
