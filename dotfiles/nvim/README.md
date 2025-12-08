@@ -262,6 +262,18 @@ This keeps startup fast while ensuring plugins are available when needed.
 
 ## Common Issues
 
+### Icons not displaying (iTerm users)
+
+If you're using iTerm and seeing boxes instead of icons in the file tree or completion menus, you need to change the terminal font:
+
+1. Open **iTerm Settings** → **Profiles** → **Text**
+2. Change **Font** to **Hack Nerd Font Mono** (or another Nerd Font variant)
+3. Restart Neovim
+
+The nvim setup relies on Nerd Font icons from `nvim-web-devicons`. Make sure your terminal font supports these icons.
+
+**Reference:** [vim-devicons issue #226](https://github.com/ryanoasis/vim-devicons/issues/226)
+
 ### Colors look wrong
 
 - Ensure your terminal supports true color (24-bit color)
