@@ -32,3 +32,15 @@ autocmd("VimResized", {
     vim.cmd("tabdo wincmd =")
   end,
 })
+
+-- Open neo-tree by default when opening a file
+augroup("neo_tree_startup", { clear = true })
+autocmd("VimEnter", {
+  group = "neo_tree_startup",
+  callback = function(event)
+    -- Only open for regular files, not for special buffers
+    if vim.fn.argc() == 0 or (vim.fn.argc() == 1 and event.file == "") then
+      require("neo-tree.command").execute({ action = "show" })
+    end
+  end,
+})
