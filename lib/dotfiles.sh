@@ -47,4 +47,4 @@ stow_dotfiles() {
 # Register checks for installation summary
 register_check "~/.zshrc.toolbox (symlinked)" "[[ -L \$HOME/.zshrc.toolbox ]]"
 register_check "~/.config/nvim (symlinked)" "[[ -L \$HOME/.config/nvim ]]"
-register_check "~/.config/toolbox/llm.conf (symlinked)" "[[ -L \$HOME/.config/toolbox/llm.conf ]]"
+register_check "~/.config/toolbox (symlinked)" "[[ -L \$HOME/.config/toolbox ]]"

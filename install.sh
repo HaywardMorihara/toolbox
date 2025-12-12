@@ -257,6 +257,9 @@ main() {
   # 11. Stow dotfiles (creates ~/.zshrc.toolbox symlink)
   stow_dotfiles "$REPO_ROOT" || log_warn "Failed to stow dotfiles"
 
+  # 11b. Store installation path (for shell functions to locate toolbox repo)
+  store_install_path || log_warn "Failed to store installation path"
+
   # 12. Setup AI instructions (symlinks to Claude and OpenCode)
   setup_ai_instructions || log_warn "Failed to setup AI instructions"
 
