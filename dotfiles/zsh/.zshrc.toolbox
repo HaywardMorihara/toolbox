@@ -126,6 +126,19 @@ md() {
   bash "$TOOLBOX_ROOT/scripts/markdown.sh" "$@"
 }
 
+# LLM provider router
+# Wrapper for scripts/intern.sh
+# Routes calls to different LLM providers based on ~/.config/toolbox/llm.conf
+# Supported providers: claude (default), opencode
+# Usage: intern [ARGS...]
+intern() {
+  if [[ -z "$TOOLBOX_ROOT" ]]; then
+    echo "Error: Toolbox installation path not configured" >&2
+    return 1
+  fi
+  bash "$TOOLBOX_ROOT/scripts/intern.sh" "$@"
+}
+
 # ===== Environment Variables =====
 # Add tool-specific environment variables here
 

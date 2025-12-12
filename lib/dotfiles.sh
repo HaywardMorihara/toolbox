@@ -33,6 +33,13 @@ stow_dotfiles() {
     return 1
   }
 
+  # Stow toolbox config package (using dotfiles/ directory)
+  stow -d dotfiles -t ~ toolbox || {
+    log_error "Failed to stow toolbox config"
+    log_info "If conflicts exist, backup and remove: ~/.config/toolbox"
+    return 1
+  }
+
   log_success "Dotfiles stowed successfully"
   return 0
 }
@@ -40,3 +47,4 @@ stow_dotfiles() {
 # Register checks for installation summary
 register_check "~/.zshrc.toolbox (symlinked)" "[[ -L \$HOME/.zshrc.toolbox ]]"
 register_check "~/.config/nvim (symlinked)" "[[ -L \$HOME/.config/nvim ]]"
+register_check "~/.config/toolbox/llm.conf (symlinked)" "[[ -L \$HOME/.config/toolbox/llm.conf ]]"
