@@ -15,6 +15,7 @@ _Neovim is a modern, extensible version of Vim focused on usability and extensib
 | `nvim <file>` | Open file in Neovim |
 | `nvim .` | Open current directory |
 | `:help <topic>` | Open help documentation |
+| `:help index` | List of all default keybindings |
 | `:q` | Quit (no unsaved changes) |
 | `:q!` | Quit without saving |
 | `:w` | Save file |
