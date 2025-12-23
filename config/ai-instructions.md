@@ -77,3 +77,13 @@ Write comments that explain **why** code exists, not **what** it does:
   - Important context that isn't immediately clear from code
 
 This keeps comments valuable and reduces noise in the codebase.
+
+## Documentation Updates
+
+When making changes to the codebase, update any relevant documentation to keep it in sync:
+- Update README files if adding, removing, or changing features
+- Update inline documentation and docstrings when modifying function signatures or behavior
+- Update configuration examples if changing config options
+- Update any guides or tutorials affected by the changes
+
+Documentation should be updated as part of the same task, not deferred to a separate effort.
