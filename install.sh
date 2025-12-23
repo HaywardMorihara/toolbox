@@ -71,6 +71,7 @@ INSTALL_PANDOC=false
 INSTALL_DOTFILES=false
 INSTALL_ZSHRC=false
 INSTALL_AI_INSTRUCTIONS=false
+INSTALL_SKILLS=false
 INSTALL_UPDATE=false
 INTERACTIVE=true
 
@@ -95,6 +96,7 @@ OPTIONS:
   --dotfiles     Stow dotfiles (symlink ~/.zshrc.toolbox)
   --zshrc        Modify ~/.zshrc to source toolbox config
   --ai-instructions   Setup AI instructions for Claude Code and OpenCode
+  --skills       Symlink local skills to ~/.claude/skills
   --update       Update toolbox repository (git pull)
   -h, --help     Show this help message
 
@@ -153,6 +155,9 @@ parse_flags() {
       --ai-instructions)
         INSTALL_AI_INSTRUCTIONS=true
         ;;
+      --skills)
+        INSTALL_SKILLS=true
+        ;;
       --update)
         INSTALL_UPDATE=true
         ;;
@@ -169,7 +174,7 @@ parse_flags() {
     shift
   done
 
-  export INSTALL_ALL INSTALL_CONFIG INSTALL_BREW INSTALL_STOW INSTALL_TREE INSTALL_CLAUDE INSTALL_NEOVIM INSTALL_OPENCODE INSTALL_GH INSTALL_FONTS INSTALL_PANDOC INSTALL_DOTFILES INSTALL_ZSHRC INSTALL_AI_INSTRUCTIONS INSTALL_UPDATE INTERACTIVE
+  export INSTALL_ALL INSTALL_CONFIG INSTALL_BREW INSTALL_STOW INSTALL_TREE INSTALL_CLAUDE INSTALL_NEOVIM INSTALL_OPENCODE INSTALL_GH INSTALL_FONTS INSTALL_PANDOC INSTALL_DOTFILES INSTALL_ZSHRC INSTALL_AI_INSTRUCTIONS INSTALL_SKILLS INSTALL_UPDATE INTERACTIVE
 }
 
 # Parse flags
@@ -263,7 +268,10 @@ main() {
   # 12. Setup AI instructions (symlinks to Claude and OpenCode)
   setup_ai_instructions || log_warn "Failed to setup AI instructions"
 
-  # 13. Modify ~/.zshrc (source ~/.zshrc.toolbox)
+  # 13. Setup Claude skills (symlinks to ~/.claude/skills)
+  setup_claude_skills || log_warn "Failed to setup Claude skills"
+
+  # 14. Modify ~/.zshrc (source ~/.zshrc.toolbox)
   setup_zshrc_integration || log_warn "Failed to setup .zshrc integration"
 
   # Summary
