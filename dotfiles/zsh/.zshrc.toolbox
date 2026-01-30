@@ -140,6 +140,17 @@ intern() {
   bash "$TOOLBOX_ROOT/scripts/intern.sh" "$@"
 }
 
+# Strip image references from Markdown files
+# Wrapper for scripts/markdown-strip-images.sh
+# Usage: mdstrip <file.md>
+mdstrip() {
+  if [[ -z "$TOOLBOX_ROOT" ]]; then
+    echo "Error: Toolbox installation path not configured" >&2
+    return 1
+  fi
+  bash "$TOOLBOX_ROOT/scripts/markdown-strip-images.sh" "$@"
+}
+
 # ===== Environment Variables =====
 # Add tool-specific environment variables here
 
