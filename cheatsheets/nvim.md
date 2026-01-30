@@ -195,6 +195,7 @@ Once in the file tree:
 | Command | Description |
 |---------|-------------|
 | `:e <file>` | Open file in buffer |
+| `:e` | Refresh current file (reload from disk) |
 | `:b N` | Switch to buffer N |
 | `:bn` | Next buffer |
 | `:bp` | Previous buffer |
