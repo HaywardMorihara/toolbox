@@ -3,8 +3,8 @@
 setup_ai_instructions() {
   local component_name="AI Instructions"
 
-  if [[ ! -f "$REPO_ROOT/config/ai-instructions.md" ]]; then
-    log_error "AI instructions file not found at $REPO_ROOT/config/ai-instructions.md"
+  if [[ ! -f "$REPO_ROOT/ai/ai-instructions.md" ]]; then
+    log_error "AI instructions file not found at $REPO_ROOT/ai/ai-instructions.md"
     return 1
   fi
 
@@ -14,7 +14,7 @@ setup_ai_instructions() {
 
   log_info "Setting up $component_name..."
 
-  local source_file="$REPO_ROOT/config/ai-instructions.md"
+  local source_file="$REPO_ROOT/ai/ai-instructions.md"
   local claude_dir="$HOME/.claude"
   local claude_link="$claude_dir/CLAUDE.md"
   local opencode_dir="$HOME/.config/opencode"

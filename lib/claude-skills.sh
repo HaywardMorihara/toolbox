@@ -3,7 +3,7 @@
 
 setup_claude_skills() {
   local component_name="Claude Skills"
-  local skills_source="$REPO_ROOT/config/skills"
+  local skills_source="$REPO_ROOT/ai/skills"
   local skills_target="$HOME/.claude/skills"
 
   # Check if source skills directory exists
@@ -86,9 +86,9 @@ setup_claude_skills() {
   return 0
 }
 
-# Register check for each skill in config/skills/
+# Register check for each skill in ai/skills/
 _register_skill_checks() {
-  local skills_source="${REPO_ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}/config/skills"
+  local skills_source="${REPO_ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}/ai/skills"
 
   if [[ -d "$skills_source" ]]; then
     for skill_dir in "$skills_source"/*/; do

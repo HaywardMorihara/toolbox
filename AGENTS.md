@@ -122,6 +122,11 @@ This pattern eliminates manual tracking and ensures accurate status reporting.
   - Examples: `stow.sh`, `tree.sh`, `claude.sh`
   - **Purpose**: Installing external packages/tools via package managers (brew, etc.)
 
+- **ai/** - AI-specific configurations
+  - `ai-instructions.md` - Claude Code project instructions (symlinked to ~/.claude/CLAUDE.md)
+  - `skills/` - Custom Claude Code skills
+  - **Purpose**: Configuration for AI tools and Claude Code integration
+
 - **dotfiles/** - Stow-managed user configurations
   - Each subdirectory is a Stow package (e.g., `zsh/`, `git/`)
   - Files use `.toolbox` suffix to avoid conflicts (e.g., `.zshrc.toolbox`)
