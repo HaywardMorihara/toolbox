@@ -78,6 +78,9 @@ tr - Translate/delete characters
 tee - Write to file AND stdout
   command | tee output.txt               Display output AND save to file
 
+pbcopy - Copy to clipboard (macOS)
+  cat file | pbcopy                      Copy file contents to clipboard
+
 Combining redirects:
   command > out.txt 2> err.txt           Separate stdout and stderr
   command1 | tee temp.txt | command2     Pipe through tee for intermediate save
