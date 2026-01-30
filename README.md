@@ -13,6 +13,15 @@ source ~/.zshrc
 
 **Note:** You can clone the toolbox to any directory. The installation path is automatically detected and stored for shell functions to use. `~/toolbox` is just the recommended example location.
 
+## Updating Your Environment
+
+To get the latest tools and configurations:
+
+```bash
+cd ~/toolbox
+./install.sh --update --all
+```
+
 ## Mission
 
 A craftsman is only as good as their tools. This toolbox is a curated collection of tools, configurations, and scripts that travel with you across machines. It's your personal dev environment in version control.
