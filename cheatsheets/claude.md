@@ -31,6 +31,41 @@
 - `Ctrl+t` - show the tasks the agent is executing
 - `Ctrl+Shift+G` - switch to the full-screen vim editor
 
+### Sandbox Configuration
+
+By default, Claude Code runs in a sandbox with restricted file system access. To allow Claude to read or edit directories beyond the standard allow list:
+
+**Edit `~/.claude/settings.json`:**
+```json
+{
+  "sandbox": {
+    "fileSystem": {
+      "read": {
+        "denyOnly": [".env", "~/.netrc", "~/.aws", "~/.ssh", "~/.npmrc"]
+      },
+      "write": {
+        "allowOnly": [
+          "/dev/stdout",
+          "/dev/stderr",
+          "/dev/null",
+          "/dev/tty",
+          "/tmp/claude",
+          ".",
+          "/path/to/additional/directory"
+        ]
+      }
+    }
+  }
+}
+```
+
+Key points:
+- `.` allows access to current working directory (project root)
+- Add absolute paths to grant access to additional directories
+- Changes take effect immediately in new Claude Code sessions
+- Sensitive paths like `~/.ssh` and `~/.aws` are protected by default
+- Use `/sandbox` command to manage restrictions interactively
+
 ### Tips
 - Tell Claude the document structure you want (or provide template)
 - Give it tools/commands to test what it's doing
