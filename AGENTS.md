@@ -347,6 +347,7 @@ Whenever you make meaningful changes to `install.sh` (flags, behavior, installat
 4. **Wrong check commands** - Use `command -v tool` for CLI tools, `[[ -L $HOME/file ]]` for symlinks
 5. **Not respecting the dependency order** - Homebrew must come before other tools
 6. **Forgetting documentation updates** - Always sync README.md, AGENTS.md, and install.sh help text after interface changes
+7. **Confusing instruction file scope** - AGENTS.md and CLAUDE.md in this toolbox repository are toolbox-specific instructions only. They do not apply globally to other projects. When a user says "remember for all projects", clarify whether they mean the toolbox specifically or other projects. For truly global instructions, they would need different storage (e.g., shared location or Claude settings, not in a project repo).
 
 ## References
 
