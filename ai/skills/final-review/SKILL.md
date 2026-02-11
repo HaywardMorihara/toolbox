@@ -81,10 +81,34 @@ Verify the solution still works after cleanup:
 - **Completeness** - All changes must be necessary, documentation must be updated, and code must be production-ready before committing
 - **Trust internal code** - Don't add defensive error handling for scenarios that can't happen based on internal guarantees; only validate at system boundaries (user input, external APIs)
 
+## Creating the Commit
+
+When creating a commit, keep the message **brief and descriptive**:
+
+**Format:**
+```
+<type>: <short description (under 50 chars)>
+```
+
+**Types:**
+- `fix:` — Bug fixes
+- `feat:` — New features
+- `refactor:` — Code refactoring
+- `docs:` — Documentation
+- `test:` — Test changes
+- `chore:` — Build, deps, tooling
+
+**Examples:**
+- `fix: handle null pointer in validation`
+- `feat: add dark mode toggle`
+- `docs: update API examples`
+
+**Key principle:** Commit messages should clearly convey intent and scope, not repeat the diff. One logical change per commit.
+
 ## After This Review
 
 Once you've completed all 6 steps:
-1. Create a commit with a clear, focused message
+1. Create a commit with a clear, focused message (see above)
 2. Push to the remote if requested
 3. Mark the task as complete
 4. Request final review if needed
