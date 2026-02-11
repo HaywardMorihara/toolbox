@@ -349,6 +349,16 @@ Whenever you make meaningful changes to `install.sh` (flags, behavior, installat
 6. **Forgetting documentation updates** - Always sync README.md, AGENTS.md, and install.sh help text after interface changes
 7. **Confusing instruction file scope** - AGENTS.md and CLAUDE.md in this toolbox repository are toolbox-specific instructions only. They do not apply globally to other projects. When a user says "remember for all projects", clarify whether they mean the toolbox specifically or other projects. For truly global instructions, they would need different storage (e.g., shared location or Claude settings, not in a project repo).
 
+## Skills Management
+
+When creating new skills while working in this repository:
+- **Create skills in:** `ai/skills/<skill-name>/SKILL.md`
+- **NOT in:** `~/.claude/skills/` (that's for global user skills)
+- **Structure:** Each skill gets its own directory with a SKILL.md file
+- **Naming:** Use lowercase with hyphens (e.g., `git-workflow`, `build-check`)
+
+**Why:** Skills in the toolbox repo are shared across the project and tracked in git. Global skills in ~/.claude/skills/ are user-specific and not version-controlled.
+
 ## References
 
 - README.md - Project overview and quick start
