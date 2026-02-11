@@ -1,50 +1,24 @@
 # AI Assistant Instructions
 
-## Using GitHub CLI for Queries
+## GitHub CLI and Pull Requests
 
-Always use the `gh` CLI tool for GitHub interactions. This ensures you query the source of truth rather than making assumptions about repository state.
+Use the `/gh-pr-comments` skill to:
+- Query GitHub state using the `gh` CLI (ensures source of truth, not assumptions)
+- Review all PR feedback including general comments and inline code comments
+- Understand common GitHub CLI commands for issues, PRs, and workflows
 
-Common commands:
-- **View an issue**: `gh issue view <number>`
-- **View a pull request**: `gh pr view <number>`
-- **List issues**: `gh issue list`
-- **List pull requests**: `gh pr list`
-- **Get repository information**: `gh repo view`
-- **Check workflows/actions**: `gh run list`
-- **Manage labels, assignees, and other metadata**: Use `gh issue edit`, `gh pr edit`, etc.
+Invoke with `/gh-pr-comments` when you need to gather complete PR context or check for feedback before marking PRs as ready.
 
-When you need information about GitHub state, always query it using `gh` commands rather than assuming the current state.
+## Final Code Review
 
-## Addressing GitHub PR Comments
+Use the `/final-review` skill before completing tasks and committing changes. It provides a comprehensive 6-step checklist ensuring:
+- Documentation is updated first
+- All changes are necessary and within scope
+- Iterative/debug code is cleaned up
+- Code quality standards are met
+- Changes are tested one final time
 
-When responding to PR feedback, check for both general and inline comments:
-
-- **General PR comments**: Review comments on the PR itself using `gh pr view <number>`
-- **Inline comments**: Review code-level comments left on specific lines using `gh api repos/<owner>/<repo>/pulls/<number>/comments`
-
-Both types of comments need to be addressed before marking a PR as ready. Inline comments (left on specific code lines during review) are easy to miss but are critical feedback that must be incorporated.
-
-## Final Code Review Before Declaring Tasks Done
-
-Before marking a task as complete, committing changes, or asking for a final review, perform a thorough final code review:
-
-1. **Update documentation first** - Before anything else:
-   - Update README files if adding, removing, or changing features
-   - Update inline documentation and docstrings when modifying function signatures or behavior
-   - Update configuration examples if changing config options
-   - Update any guides or tutorials affected by the changes
-
-2. **Review all changes made** - Go through every file modification and understand what changed and why
-3. **Verify necessity** - Ask yourself: Is this change actually needed to solve the problem? Could it be removed?
-4. **Clean up iterative work** - During development, you may make multiple attempts to debug something. Before finishing:
-   - Remove debug code, console.logs, or temporary test lines
-   - Delete commented-out code that's no longer needed
-   - Revert exploratory changes that didn't lead to the solution
-   - Clean up any redundant or dead code paths
-5. **Check code quality** - Ensure the final code is clean, readable, and follows project conventions
-6. **Test one more time** - Verify the solution still works after cleanup
-
-Only commit, push, and declare the task done once you're confident all changes are necessary, documentation is updated, and the code is truly ready.
+Invoke with `/final-review` when you're about to mark a task as complete.
 
 ## Unit Testing Guidelines
 
@@ -83,13 +57,3 @@ Write comments that explain **why** code exists, not **what** it does:
   - Important context that isn't immediately clear from code
 
 This keeps comments valuable and reduces noise in the codebase.
-
-## Documentation Updates
-
-When making changes to the codebase, update any relevant documentation to keep it in sync:
-- Update README files if adding, removing, or changing features
-- Update inline documentation and docstrings when modifying function signatures or behavior
-- Update configuration examples if changing config options
-- Update any guides or tutorials affected by the changes
-
-Documentation should be updated as part of the same task, not deferred to a separate effort.

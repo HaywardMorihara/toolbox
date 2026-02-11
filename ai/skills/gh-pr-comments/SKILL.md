@@ -79,3 +79,73 @@ Get comments on a specific file:
 ```bash
 gh api repos/owner/repo/pulls/<number>/comments | jq '.[] | select(.path == "src/app.js")'
 ```
+
+## Additional GitHub CLI Commands
+
+Beyond PR comments, here are other useful `gh` commands for common GitHub tasks:
+
+### Issues
+
+```bash
+# View an issue
+gh issue view <number>
+
+# List all issues
+gh issue list
+
+# Create an issue
+gh issue create --title "Title" --body "Description"
+
+# Edit an issue (labels, assignees, etc)
+gh issue edit <number> --add-label "bug" --add-assignee "@me"
+```
+
+### Pull Requests
+
+```bash
+# View a pull request (general comments only - use /gh-pr-comments for inline comments)
+gh pr view <number>
+
+# List all pull requests
+gh pr list
+
+# Create a pull request
+gh pr create --title "Title" --body "Description"
+
+# Check PR review status
+gh pr review-status <number>
+
+# Edit a PR (labels, assignees, etc)
+gh pr edit <number> --add-label "enhancement"
+```
+
+### Repository Information
+
+```bash
+# View repository details
+gh repo view
+
+# Get repository information in JSON
+gh repo view --json nameWithOwner,description,isPrivate,url
+```
+
+### Workflows & Actions
+
+```bash
+# List recent workflow runs
+gh run list
+
+# View details of a specific workflow run
+gh run view <run-id>
+
+# View logs of a workflow run
+gh run view <run-id> --log
+```
+
+## When to Use This Skill for Different Tasks
+
+- **Reviewing PR feedback**: Use `/gh-pr-comments` to check all comments (general + inline)
+- **Quick PR checks**: Use basic `gh pr view` for general overview
+- **Managing issues and PRs**: Use `gh issue` and `gh pr edit` commands
+- **Understanding repository state**: Use `gh repo view` for metadata
+- **Debugging workflows**: Use `gh run` commands for CI/CD status
