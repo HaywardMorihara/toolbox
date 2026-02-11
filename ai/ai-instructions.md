@@ -28,17 +28,23 @@ Both types of comments need to be addressed before marking a PR as ready. Inline
 
 Before marking a task as complete, committing changes, or asking for a final review, perform a thorough final code review:
 
-1. **Review all changes made** - Go through every file modification and understand what changed and why
-2. **Verify necessity** - Ask yourself: Is this change actually needed to solve the problem? Could it be removed?
-3. **Clean up iterative work** - During development, you may make multiple attempts to debug something. Before finishing:
+1. **Update documentation first** - Before anything else:
+   - Update README files if adding, removing, or changing features
+   - Update inline documentation and docstrings when modifying function signatures or behavior
+   - Update configuration examples if changing config options
+   - Update any guides or tutorials affected by the changes
+
+2. **Review all changes made** - Go through every file modification and understand what changed and why
+3. **Verify necessity** - Ask yourself: Is this change actually needed to solve the problem? Could it be removed?
+4. **Clean up iterative work** - During development, you may make multiple attempts to debug something. Before finishing:
    - Remove debug code, console.logs, or temporary test lines
    - Delete commented-out code that's no longer needed
    - Revert exploratory changes that didn't lead to the solution
    - Clean up any redundant or dead code paths
-4. **Check code quality** - Ensure the final code is clean, readable, and follows project conventions
-5. **Test one more time** - Verify the solution still works after cleanup
+5. **Check code quality** - Ensure the final code is clean, readable, and follows project conventions
+6. **Test one more time** - Verify the solution still works after cleanup
 
-Only commit, push, and declare the task done once you're confident all changes are necessary and the code is truly ready.
+Only commit, push, and declare the task done once you're confident all changes are necessary, documentation is updated, and the code is truly ready.
 
 ## Unit Testing Guidelines
 
