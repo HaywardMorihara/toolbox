@@ -277,9 +277,9 @@ toolbox/
 │   ├── gh.sh               # GitHub CLI
 │   └── pandoc.sh           # Pandoc document converter
 │
-├── ai/                     # AI-specific configurations
-│   ├── ai-instructions.md  # AI instructions for Claude Code
-│   └── skills/             # Claude Code custom skills
+├── ai/                      # AI-specific configurations
+│   ├── AI_INSTRUCTIONS.md  # AI instructions for Claude Code
+│   └── skills/              # Claude Code custom skills
 │
 ├── dotfiles/               # Stow-managed dotfiles
 │   ├── zsh/

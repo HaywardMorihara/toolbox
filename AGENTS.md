@@ -123,7 +123,7 @@ This pattern eliminates manual tracking and ensures accurate status reporting.
   - **Purpose**: Installing external packages/tools via package managers (brew, etc.)
 
 - **ai/** - AI-specific configurations
-  - `ai-instructions.md` - Claude Code project instructions (symlinked to ~/.claude/CLAUDE.md)
+  - `AI_INSTRUCTIONS.md` - Claude Code project instructions (symlinked to ~/.claude/CLAUDE.md)
   - `skills/` - Custom Claude Code skills
   - **Purpose**: Configuration for AI tools and Claude Code integration
 
