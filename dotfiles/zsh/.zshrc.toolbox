@@ -133,6 +133,7 @@ md() {
 # Usage: intern [ARGS...]
 intern() {
   echo "\033[33mWatch token usage!\033[0m"
+  echo "\033[33mWatch the AI thinking (detect, learn)\033[0m"
   if [[ -z "$TOOLBOX_ROOT" ]]; then
     echo "Error: Toolbox installation path not configured" >&2
     return 1
