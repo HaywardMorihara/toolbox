@@ -28,8 +28,31 @@
 - **MCP Servers** - Extensions like tools; `mcp add <server-name>` (config: `.mcp.json`)
   - SQL MCPs available
   - Can run locally (e.g., Puppeteer for screenshots)
+- **AskUserQuestion** - Request user input during task execution (see below)
 - `Ctrl+t` - show the tasks the agent is executing
 - `Ctrl+Shift+G` - switch to the full-screen vim editor
+
+### Using AskUserQuestion
+
+The `AskUserQuestion` tool prompts for user input during task execution. Use it to:
+- **Make architectural decisions** - Let the user choose between approaches (e.g., "JWT vs sessions?")
+- **Gather preferences** - Get user guidance on implementation details
+- **Seek approval** - Confirm risky or consequential actions
+- **Clarify requirements** - Resolve ambiguous specs before starting work
+
+**How to request it explicitly:**
+Say any of these to ask Claude to use the tool:
+- "Use AskUserQuestion to ask me..."
+- "AskUserQuestion: should we [option A] or [option B]?"
+- "Ask me [question] using AskUserQuestion"
+
+**Example usage:**
+```
+User: "Add authentication to my API"
+Claude: "Use AskUserQuestion to let me choose between JWT, session-based auth, or OAuth"
+```
+
+Claude will then present options for you to choose from, making the implementation decision user-driven rather than Claude-decided.
 
 ### Sandbox Configuration
 
