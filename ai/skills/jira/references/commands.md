@@ -1,80 +1,40 @@
 # Commands Reference
 
-Complete reference for the `jira` CLI.
+Complete reference for `acli jira workitem` (Atlassian CLI).
+
+**Note:** This guide uses environment variables for portability. Set these in `private/jira.sh` (see SKILL.md Setup section):
+- `JIRA_PROJECT` — Your project ID (e.g., "PROJ")
+- `JIRA_SITE` — Your Atlassian domain (e.g., "yourcompany.atlassian.net")
+- `JIRA_USER` — Your Atlassian account email
 
 ---
 
 ## Viewing Issues
 
 ```bash
-# View single issue
-jira issue view ISSUE-KEY
+# View single issue (default fields: key, issuetype, summary, status, assignee, description)
+acli jira workitem view KEY
 
-# View with more comments
-jira issue view ISSUE-KEY --comments 5
+# View with specific fields (comma-separated, no spaces)
+acli jira workitem view KEY --fields summary,status
 
-# Get raw JSON
-jira issue view ISSUE-KEY --raw
-```
+# View specific fields including description
+acli jira workitem view KEY --fields summary,description,status
 
----
+# Raw JSON output
+acli jira workitem view KEY --json
 
-## Listing Issues
+# View all fields
+acli jira workitem view KEY --fields '*all'
 
-```bash
-# List all issues in project
-jira issue list
+# View navigable fields only
+acli jira workitem view KEY --fields '*navigable'
 
-# List my issues
-jira issue list -a$(jira me)
+# View all except a specific field
+acli jira workitem view KEY --fields '*navigable,-comment'
 
-# Filter by status (use quotes for multi-word statuses)
-jira issue list -s"In Progress"
-jira issue list -s"To Do"
-jira issue list -sDone
-
-# Filter by type
-jira issue list -tBug
-jira issue list -tStory
-jira issue list -tTask
-jira issue list -tEpic
-
-# Filter by priority
-jira issue list -yHigh
-jira issue list -yCritical
-
-# Filter by label
-jira issue list -lurgent -lbug
-
-# Combine filters
-jira issue list -a$(jira me) -s"In Progress" -yHigh
-
-# Search with text
-jira issue list "login error"
-
-# Recently accessed
-jira issue list --history
-
-# Issues I'm watching
-jira issue list -w
-
-# Created/updated filters
-jira issue list --created today
-jira issue list --created week
-jira issue list --updated -2d
-
-# Plain output for scripting
-jira issue list --plain --no-headers
-
-# Specific columns
-jira issue list --plain --columns key,summary,status,assignee
-
-# Raw JQL query
-jira issue list -q"status = 'In Progress' AND assignee = currentUser()"
-
-# Paginate results
-jira issue list --paginate 20
-jira issue list --paginate 10:50 # start:limit
+# Open in web browser
+acli jira workitem view KEY --web
 ```
 
 ---
@@ -82,56 +42,129 @@ jira issue list --paginate 10:50 # start:limit
 ## Creating Issues
 
 ```bash
-# Interactive creation
-jira issue create
+# Create with summary (interactive for other fields)
+acli jira workitem create --project "$JIRA_PROJECT" --summary "Login button not working"
 
-# Non-interactive with all fields
-jira issue create \
-    -tBug \
-    -s"Login button not working" \
-    -b"Users cannot click the login button on Safari" \
-    -yHigh \
-    -lbug -lurgent
+# Create with summary, type, and description
+acli jira workitem create \
+  --project "$JIRA_PROJECT" \
+  --type Story \
+  --summary "Login button not working" \
+  --description "Users cannot click the login button on Safari"
 
-# Create and assign to self
-jira issue create -tTask -s"Summary" -a$(jira me)
+# Create as a Bug
+acli jira workitem create --project "$JIRA_PROJECT" --type Bug --summary "Login fails on Safari"
 
-# Create subtask (requires parent)
-jira issue create -tSub-task -P"PROJ-123" -s"Subtask summary"
+# Create as a Task
+acli jira workitem create --project "$JIRA_PROJECT" --type Task --summary "Update documentation"
 
-# Create with custom fields
-jira issue create -tStory -s"Summary" --custom story-points=3
+# Create with assignee (use email or @me for self-assign)
+acli jira workitem create \
+  --project "$JIRA_PROJECT" \
+  --type Story \
+  --summary "..." \
+  --assignee "user@example.com"
 
-# Skip prompts for optional fields
-jira issue create -tTask -s"Quick task" --no-input
+# Self-assign
+acli jira workitem create \
+  --project "$JIRA_PROJECT" \
+  --type Story \
+  --summary "..." \
+  --assignee "@me"
 
-# Open in browser after creation
-jira issue create -tBug -s"Bug title" --web
+# Create with labels
+acli jira workitem create \
+  --project "$JIRA_PROJECT" \
+  --type Bug \
+  --summary "..." \
+  --label "bug,urgent"
 
-# Read description from file
-jira issue create -tStory -s"Summary" --template /path/to/template.md
+# Create with description from file
+acli jira workitem create \
+  --project "$JIRA_PROJECT" \
+  --type Story \
+  --summary "..." \
+  --description-file "description.txt"
 
-# Read description from stdin
-echo "Description here" | jira issue create -tTask -s"Summary"
+# Open editor for summary and description
+acli jira workitem create \
+  --project "$JIRA_PROJECT" \
+  --type Story \
+  --editor
+
+# Create from JSON file
+acli jira workitem create --project "$JIRA_PROJECT" --from-json "workitem.json"
+
+# Generate JSON template
+acli jira workitem create --generate-json
+
+# Create via REST API v2 (when custom fields are required)
+curl -X POST \
+  -u "$JIRA_USER:$JIRA_API_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "fields": {
+      "project": { "key": "'$JIRA_PROJECT'" },
+      "summary": "Task summary",
+      "description": "Task description",
+      "issuetype": { "name": "Task" },
+      "parent": { "key": "ID-14004" },
+      "customfield_10200": "team-uuid-here",
+      "labels": ["label1", "label2"]
+    }
+  }' \
+  "https://$JIRA_SITE/rest/api/2/issue"
 ```
 
-**Multi-line content:** The CLI chokes on multi-line strings. Write to `/tmp` first:
+---
+
+## Searching Issues
 
 ```bash
-cat > /tmp/jira_body.md <<'EOF'
-## Description
-User needs ability to export data...
+# Basic search with JQL
+acli jira workitem search --jql "project = \"$JIRA_PROJECT\""
 
-## Acceptance Criteria
-- Export works for CSV
-- Export works for JSON
-EOF
+# Search for my issues
+acli jira workitem search --jql "assignee = currentUser()"
 
-jira issue create --no-input \
-  -tStory \
-  -pPROJ \
-  -s"Add export functionality" \
-  -b"$(cat /tmp/jira_body.md)"
+# Search by status
+acli jira workitem search --jql "project = \"$JIRA_PROJECT\" AND status = 'In Progress'"
+
+# Search by type
+acli jira workitem search --jql "project = \"$JIRA_PROJECT\" AND type = Story"
+
+# Combined search
+acli jira workitem search --jql "project = \"$JIRA_PROJECT\" AND status = 'To Do' AND type = Bug"
+
+# Search by created date (past 7 days)
+acli jira workitem search --jql "created >= -7d"
+
+# Search by text in summary
+acli jira workitem search --jql "summary ~ 'login' AND project = \"$JIRA_PROJECT\""
+
+# Limit number of results
+acli jira workitem search --jql "assignee = currentUser()" --limit 10
+
+# Get count of results
+acli jira workitem search --jql "project = \"$JIRA_PROJECT\"" --count
+
+# Get all results with pagination
+acli jira workitem search --jql "project = \"$JIRA_PROJECT\"" --paginate
+
+# Output as CSV
+acli jira workitem search --jql "project = \"$JIRA_PROJECT\"" --csv
+
+# Output as JSON
+acli jira workitem search --jql "project = \"$JIRA_PROJECT\"" --json
+
+# Search with specific fields
+acli jira workitem search --jql "project = \"$JIRA_PROJECT\"" --fields "key,summary,status,assignee"
+
+# Search using filter ID
+acli jira workitem search --filter 10001
+
+# Open search results in web browser
+acli jira workitem search --jql "project = \"$JIRA_PROJECT\"" --web
 ```
 
 ---
@@ -139,113 +172,141 @@ jira issue create --no-input \
 ## Transitioning Issues
 
 ```bash
-# Move to a state
-jira issue move ISSUE-KEY "In Progress"
-jira issue move ISSUE-KEY "Done"
-jira issue move ISSUE-KEY "To Do"
+# Transition a single work item to a new status
+acli jira workitem transition --key "KEY-123" --status "In Progress"
+acli jira workitem transition --key "KEY-123" --status "Done"
 
-# Move with comment
-jira issue move ISSUE-KEY "Done" --comment "Completed the implementation"
+# Transition multiple work items
+acli jira workitem transition --key "KEY-1,KEY-2,KEY-3" --status "Done"
 
-# Move and set resolution
-jira issue move ISSUE-KEY "Done" -R"Fixed"
+# Transition with JQL query
+acli jira workitem transition --jql "project = TEAM AND status = 'To Do'" --status "In Progress"
 
-# Move and reassign
-jira issue move ISSUE-KEY "In Review" -a"reviewer@example.com"
+# Transition using filter ID
+acli jira workitem transition --filter 10001 --status "Done"
 
-# Open in browser after transition
-jira issue move ISSUE-KEY "Done" --web
+# Transition without confirmation prompt
+acli jira workitem transition --key "KEY-123" --status "Done" --yes
+
+# Output as JSON
+acli jira workitem transition --key "KEY-123" --status "Done" --json
+
+# Ignore errors when transitioning multiple items
+acli jira workitem transition --jql "project = TEAM" --status "Done" --ignore-errors
 ```
 
 ---
 
-## Assigning Issues
+## Adding Comments
 
 ```bash
-# Assign to specific user
-jira issue assign ISSUE-KEY "user@example.com"
-jira issue assign ISSUE-KEY "John Doe"
+# Add comment to a single work item
+acli jira workitem comment create --key "KEY-123" --body "This is my comment"
 
-# Assign to self
-jira issue assign ISSUE-KEY $(jira me)
+# Add comment from a file
+acli jira workitem comment create --key "KEY-123" --body-file "comment.txt"
 
-# Assign to default assignee
-jira issue assign ISSUE-KEY default
+# Comment on multiple work items via JQL
+acli jira workitem comment create --jql "project = PROJECT" --body "Comment on all matching items"
 
-# Unassign
-jira issue assign ISSUE-KEY x
+# Open editor to write comment
+acli jira workitem comment create --key "KEY-123" --editor
+
+# List comments on a work item
+acli jira workitem comment list KEY-123
 ```
 
 ---
 
-## Comments
+## Other Operations
 
 ```bash
-# Add comment
-jira issue comment add ISSUE-KEY -b"This is my comment"
+# View issue in web browser
+acli jira workitem view KEY --web
 
-# Add comment from file
-jira issue comment add ISSUE-KEY --template /path/to/comment.md
-```
-
----
-
-## Sprints
-
-```bash
-# List sprints
-jira sprint list
-
-# Active sprint only
-jira sprint list --state active
-
-# Add issue to sprint
-jira sprint add SPRINT-ID ISSUE-KEY
-
-# Close sprint
-jira sprint close SPRINT-ID
-```
-
----
-
-## Linking Issues
-
-| Relationship | Meaning |
-|--------------|---------|
-| `Blocks` | First ticket blocks second |
-| `Relates` | General relationship |
-| `Duplicate` | Same work |
-| `Epic-Story` | Story belongs to Epic |
-
-```bash
-# Basic link
-jira issue link PROJ-123 PROJ-456 "Relates"
-
-# Blocker (blocker comes first)
-jira issue link PROJ-100 PROJ-200 "Blocks"
-# Meaning: PROJ-100 blocks PROJ-200
-
-# Link to epic
-jira issue link PROJ-EPIC PROJ-STORY "Epic-Story"
-```
-
----
-
-## Other Commands
-
-```bash
-# Open issue in browser
-jira open ISSUE-KEY
-
-# Show current user
-jira me
-
-# Server info
-jira serverinfo
+# Get issue info in JSON
+acli jira workitem view KEY --json
 
 # List projects
-jira project list
+acli jira project list
 
 # List boards
-jira board list
+acli jira board list
+
+# Get current user info
+acli jira user current
+```
+
+---
+
+## Common JQL Patterns
+
+```bash
+# Current user
+assignee = currentUser()
+reporter = currentUser()
+
+# Status filters
+status = "In Progress"
+status in ("To Do", "In Progress")
+status != Done
+
+# Type filters
+type = Story
+type in (Bug, Task)
+
+# Project filter
+project = "$JIRA_PROJECT"
+
+# Date filters
+created >= -7d
+updated >= -24h
+
+# Custom fields (if available)
+customfield_10000 = "value"
+
+# Combine filters
+assignee = currentUser() AND status = "In Progress" AND type = Bug
+```
+
+---
+
+## Special Characters in JQL
+
+When JQL contains spaces or special characters, use quotes:
+
+```bash
+acli jira workitem search --jql "status = 'In Progress'"
+acli jira workitem search --jql "summary ~ 'login error'"
+```
+
+---
+
+## Error Handling
+
+**Authentication error:**
+
+See "Troubleshooting Authentication" in SKILL.md. To re-authenticate:
+```bash
+cat ~/.config/toolbox/jira-token.txt | acli jira auth login -e "$JIRA_USER" -s "$JIRA_SITE" --token
+```
+
+**Issue not found:**
+- Verify the issue key is correct
+- Confirm you have permission to view it
+- Check the project exists
+
+**Invalid transition:**
+- Run `acli jira workitem transition KEY` to see available states
+- The current status may not allow transition to target state
+- Some workflows require intermediate states
+
+---
+
+## Help
+
+```bash
+acli jira workitem --help
+acli jira workitem create --help
+acli jira workitem search --help
 ```
