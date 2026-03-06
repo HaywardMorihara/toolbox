@@ -56,39 +56,45 @@ When a user mentions an issue key in conversation:
 
 **CRITICAL REMINDERS:**
 - **ALWAYS use `$JIRA_PROJECT`** from environment - never hardcode or guess a project key
-- **ALWAYS ask for ALL optional fields** before showing the confirm command (step 5)
-- **ALWAYS show the full command** before executing (step 6)
+- **SKIP asking for information the user has already provided** in their request
+- **ALWAYS show the full command** before executing
+- Only ask for missing required fields or unclear optional fields
 
-**Step-by-step:**
+**Intelligent Flow:**
 
-1. **Gather intent**: Use `AskUserQuestion` to ask "What's this ticket about?" with issue type options (Story, Task, Bug, Other).
+Start by **parsing the user's request** to extract any information they've already provided:
+- Issue type (Story, Task, Bug, etc.)
+- Summary/title
+- Epic ID (parent)
+- Description or acceptance criteria
+- Labels
+- Assignee preferences
+- Sprint preference
 
-2. **Suggest title & description**: Draft a suggested Summary (title) based on user's response. Confirm it.
+Then **only ask for missing required fields**:
 
-3. **Parent (required, Epic only)**: Parent must be an Epic, not a Story or other issue type.
-   - First, fetch epic options: `bash ai/skills/jira/scripts/jira-fetch-epics.sh` (returns lines like `"ID-100 — Epic Name"`)
-   - Convert output to `AskUserQuestion` options (max 4 options; include "Other" for custom entry)
-   - User selects an epic
-   - Extract epic ID from selection (e.g., extract "ID-14004" from "ID-14004 — M-T SDK")
+1. **Type & Summary (if not provided)**:
+   - If both type and summary are in the user's request, skip to step 2
+   - Otherwise, use `AskUserQuestion` to ask "What's this ticket about?" with type options
 
-4. **Team (required, custom field)**: Team UUID is in `$JIRA_TEAM` (set by `private/jira.sh`).
+2. **Parent Epic (if not provided)**:
+   - If user mentioned an epic ID (e.g., "ID-14004"), use it directly
+   - Otherwise, fetch epic options: `bash ai/skills/jira/scripts/jira-fetch-epics.sh`
+   - Convert to `AskUserQuestion` options (max 4 options; include "Other" for custom entry)
+   - Extract epic ID from selection
+
+3. **Team (always auto-filled)**:
+   - Team UUID is in `$JIRA_TEAM` (set by `private/jira.sh`)
    - The script automatically passes this as `customfield_10200`
-   - **Do not ask the user** — use the pre-configured `$JIRA_TEAM`
+   - **Never ask the user**
 
-5. **Optional fields** (ask all of these, in order):
-   - **Description**: Ask "Would you like to add a description?" (Yes / Leave empty)
-     - If yes: Ask "What problem does this solve / what's the goal?" and "What are the acceptance criteria?"
-     - Draft structured description with Context, Acceptance Criteria, Links sections
-     - Show draft and confirm before proceeding
-   - **Labels**: Ask "Any labels?" with options from `$JIRA_LABEL_OPTIONS`
-     - Parse comma-separated values into `AskUserQuestion` options
-     - Always include "Leave empty" option
-     - Support multi-select; combine selected labels with commas (e.g., "bug,urgent")
-     - If `$JIRA_LABEL_OPTIONS` is empty, ask user to type labels directly
-   - **Assignee**: Ask "Who should this be assigned to?" with options: "@me" (self-assign), "Leave empty", Other
-   - **Sprint**: Ask "Which sprint?" and offer: current sprint (via JQL query), "Backlog", "Leave empty"
+4. **Optional fields (only ask if not provided)**:
+   - **Description**: If user provided details/criteria, draft a structured description. Otherwise, ask "Would you like to add a description?"
+   - **Labels**: Only ask if not mentioned in request. Use options from `$JIRA_LABEL_OPTIONS`, support multi-select
+   - **Assignee**: Only ask if not specified. Options: "@me" (self-assign), "Leave empty", Other
+   - **Sprint**: Only ask if not mentioned. Options: current sprint, "Backlog", "Leave empty"
 
-6. **Show & confirm command**: Display the full command with all collected fields. Get explicit approval.
+5. **Show & confirm command**: Display the full command with all collected fields. Get explicit approval.
    ```bash
    bash ai/skills/jira/scripts/jira-create-ticket.sh \
      --project "$JIRA_PROJECT" \
@@ -101,7 +107,27 @@ When a user mentions an issue key in conversation:
      [--labels "label1,label2"]
    ```
 
-7. **Execute & verify**: Run the script, then view the created ticket to confirm.
+6. **Execute & verify**: Run the script, then view the created ticket to confirm.
+
+**Example: User provides complete request**
+
+User: `/jira create a story for updating a script to have the --csv flag option and put it under epic ID-14004`
+
+Flow:
+- Extract: type=Story, summary="Update script to have --csv flag option", parent=ID-14004
+- Skip steps 1-2, go directly to step 4
+- Ask only for optional fields the user didn't mention (description, labels, assignee, sprint)
+- Show & confirm command
+- Execute
+
+**Example: User provides minimal request**
+
+User: `/jira create a ticket`
+
+Flow:
+- No information extracted
+- Start at step 1: ask for type and summary
+- Continue through full flow
 
 **Viewing tickets:**
 1. Fetch issue details first
