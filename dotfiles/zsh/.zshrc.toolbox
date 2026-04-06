@@ -172,6 +172,19 @@ if [[ $- == *i* ]]; then
   unset DEFAULT_WD_FILE DEFAULT_WD
 fi
 
+# ===== Daily Claude Code Upgrade =====
+# Run once per day on first terminal start
+if [[ $- == *i* ]]; then
+  _CLAUDE_UPGRADE_STAMP="${XDG_CACHE_HOME:-$HOME/.cache}/toolbox/claude-upgrade-date"
+  _TODAY="$(date +%Y-%m-%d)"
+  if [[ "$(cat "$_CLAUDE_UPGRADE_STAMP" 2>/dev/null)" != "$_TODAY" ]]; then
+    echo "$_TODAY" > "$_CLAUDE_UPGRADE_STAMP"
+    brew upgrade claude-code &>/dev/null &
+    disown
+  fi
+  unset _CLAUDE_UPGRADE_STAMP _TODAY
+fi
+
 # ===== Private Commands (local only) =====
 # Source user-defined private commands if they exist
 # Files in private/ are git-ignored and never committed
