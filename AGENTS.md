@@ -109,9 +109,10 @@ This pattern eliminates manual tracking and ensures accurate status reporting.
 - **lib/** - Core functionality and setup
   - `common.sh` - Shared utilities (logging, prompts, self-registering component system, file backup)
   - `os-detection.sh` - Platform detection ($OS, $PACKAGE_MANAGER variables)
+  - `config.sh` - Configuration directories setup (e.g., ~/.config/toolbox)
+  - `cache.sh` - Cache directories setup (e.g., ~/.cache/toolbox for ephemeral data)
   - `dotfiles.sh` - GNU Stow operations
   - `zsh-config.sh` - ~/.zshrc integration
-  - `config.sh` - Configuration directories setup (e.g., ~/.config/toolbox)
   - `mac/brew.sh` - Homebrew installation (macOS-specific)
   - **Purpose**: System setup, configuration, and utility functions. Functions that set up the environment or manage configurations.
 
@@ -149,6 +150,7 @@ This pattern eliminates manual tracking and ensures accurate status reporting.
 3. **Auto-Sourcing** - All lib and deps scripts are sourced
 4. **Installation** - `main()` executes functions in dependency order:
    - Config directories (~/.config/toolbox) - needed by tools like `cwd`
+   - Cache directories (~/.cache/toolbox) - needed for storing ephemeral data
    - Homebrew (prerequisite for other tools)
    - GNU Stow (required for dotfiles)
    - Individual tools (tree, Claude CLI, Neovim, OpenCode, GitHub CLI, Pandoc)

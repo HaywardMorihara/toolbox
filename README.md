@@ -55,7 +55,8 @@ The classic automation chart still applies, but remember: **with LLMs, the time 
 ### Configurations
 - **~/.zshrc.toolbox** - Custom Zsh config (symlinked via Stow)
 - **~/.config/nvim/** - Neovim configuration with lazy.nvim
-- **~/.config/toolbox/cheatsheets/** - Quick reference guides
+- **~/.config/toolbox/** - Config directory for toolbox-related settings
+- **~/.cache/toolbox/** - Cache directory for ephemeral toolbox data
 - **~/.zshrc** - Modified to source ~/.zshrc.toolbox
 
 ## Code Dependencies
@@ -70,6 +71,7 @@ graph LR
         common["lib/common.sh<br/>(logging, prompts,<br/>registration)"]
         osdetect["lib/os-detection.sh<br/>(OS detection)"]
         config["lib/config.sh<br/>(config dirs)"]
+        cache["lib/cache.sh<br/>(cache dirs)"]
         dotfiles["lib/dotfiles.sh<br/>(stow operations)"]
         zshconf["lib/zsh-config.sh<br/>(shell integration)"]
         brew["lib/mac/brew.sh<br/>(Homebrew setup)"]
@@ -263,6 +265,8 @@ toolbox/
 ├── lib/                    # Modular installation functions
 │   ├── common.sh           # Shared utilities (logging, prompts, self-registering components)
 │   ├── os-detection.sh     # Platform identification
+│   ├── config.sh           # Configuration directory setup
+│   ├── cache.sh            # Cache directory setup
 │   ├── dotfiles.sh         # Stow operations
 │   ├── zsh-config.sh       # ~/.zshrc modification handler
 │   └── mac/                # macOS-specific functions
