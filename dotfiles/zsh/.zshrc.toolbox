@@ -179,8 +179,7 @@ if [[ $- == *i* ]]; then
   _TODAY="$(date +%Y-%m-%d)"
   if [[ "$(cat "$_CLAUDE_UPGRADE_STAMP" 2>/dev/null)" != "$_TODAY" ]]; then
     echo "$_TODAY" > "$_CLAUDE_UPGRADE_STAMP"
-    brew upgrade claude-code </dev/null &>/dev/null &
-    disown
+    brew upgrade claude-code
   fi
   unset _CLAUDE_UPGRADE_STAMP _TODAY
 fi
