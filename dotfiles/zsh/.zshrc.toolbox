@@ -140,6 +140,17 @@ intern() {
   bash "$TOOLBOX_ROOT/scripts/intern.sh" "$@"
 }
 
+# Monitor open pull requests across multiple repos
+# Check for PRs where you are the author or have commented
+# Usage: pr-monitor [repo]
+pr-monitor() {
+  if [[ -z "$TOOLBOX_ROOT" ]]; then
+    echo "Error: Toolbox installation path not configured" >&2
+    return 1
+  fi
+  bash "$TOOLBOX_ROOT/scripts/pr-monitor.sh" "$@"
+}
+
 # Strip image references from Markdown files
 # Wrapper for scripts/markdown-strip-images.sh
 # Usage: mdstrip <file.md>
