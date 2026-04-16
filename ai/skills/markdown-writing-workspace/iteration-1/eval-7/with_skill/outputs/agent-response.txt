@@ -1,0 +1,13 @@
+I'll help you draft a professional project proposal. Since you're starting from rough notes, I need to understand the context first.
+
+**Three quick questions:**
+
+1. **Audience**: Who will be reading this proposal? (e.g., C-suite executives, board members, client stakeholders, department heads, investors)
+
+2. **Goals**: What do you want your audience to understand or approve? (e.g., "approve the project and budget", "understand the business case", "commit resources")
+
+3. **Non-Goals**: What's explicitly out of scope? (e.g., "we're not proposing a full technical deep-dive", "this isn't a detailed project plan, just the business case")
+
+Once I have these answers, I'll propose an outline tailored to your stakeholders. Then you can refine it, and I'll write the full proposal.
+
+Also—do you have those rough notes available? You can paste them here, describe them verbally, or I can work from just your answers above. Whatever's easiest.

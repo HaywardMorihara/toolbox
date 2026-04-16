@@ -1,0 +1,7 @@
+I understand you need a concise, scannable 1-page memo on incident response procedures. Before I draft it, let me ask three questions to shape the outline:
+
+1. **Audience**: Who reads this memo? (e.g., engineers, on-call rotations, entire team, management)
+2. **Goals**: What should readers be able to do after reading it? (e.g., know exactly who to contact first, understand the escalation sequence, know what info to gather)
+3. **Non-Goals**: What's out of scope? (e.g., root cause analysis, post-mortems, detailed runbooks for specific incident types)
+
+Once you answer, I'll propose a tight outline and produce the final memo.

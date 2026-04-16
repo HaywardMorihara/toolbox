@@ -1,0 +1,23 @@
+{
+  "eval_id": 6,
+  "eval_name": "incident-response-memo",
+  "prompt": "I need to create a quick memo on our incident response procedures for the team. Should be a 1-pager covering what to do when an incident is reported, escalation paths, and who to notify. Keep it concise and scannable.",
+  "assertions": [
+    {
+      "name": "Memo format",
+      "description": "Output is formatted as a memo with clear structure (e.g., title, sections)"
+    },
+    {
+      "name": "One-pager length",
+      "description": "Content is concise enough to fit on one page (under 500 words)"
+    },
+    {
+      "name": "Covers all required topics",
+      "description": "Includes: incident definition, immediate response steps, escalation procedures, key contacts"
+    },
+    {
+      "name": "Scannable formatting",
+      "description": "Uses short sentences, bullets, and white space for easy scanning"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "eval_id": 7,
+  "eval_name": "project-proposal-draft",
+  "prompt": "Can you help me draft a project proposal document? I have rough notes on the problem we're solving, the approach, timeline, and resource needs. I want to turn this into a professional-looking proposal that we can present to stakeholders.",
+  "assertions": [
+    {
+      "name": "Professional structure",
+      "description": "Output has clear sections: executive summary, problem statement, solution, timeline, resources, success metrics"
+    },
+    {
+      "name": "Executive summary first",
+      "description": "Begins with 1-2 paragraph executive summary before detailed sections"
+    },
+    {
+      "name": "Stakeholder-ready",
+      "description": "Language and formatting is professional and suitable for stakeholder presentation"
+    },
+    {
+      "name": "Clear visual hierarchy",
+      "description": "Uses headers, spacing, and formatting to guide readers through content logically"
+    }
+  ]
+}

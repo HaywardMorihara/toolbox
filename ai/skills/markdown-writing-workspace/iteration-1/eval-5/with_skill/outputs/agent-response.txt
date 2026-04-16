@@ -1,0 +1,9 @@
+I'll help you create a high-level outline for your backend migration guide. Since you're starting from scratch and want to establish the key themes (why, phases, team responsibilities), let me ask three quick questions to shape the outline:
+
+1. **Audience**: Who's reading this? (e.g., all engineers, specific teams like frontend/infra, non-technical stakeholders, future maintainers joining after the migration?)
+
+2. **Primary Goal**: What's the main outcome you want? (e.g., get buy-in and excitement, give everyone clear instructions on their role, set timeline expectations, ensure smooth handoff after completion?)
+
+3. **Non-Goals**: What's explicitly *not* covered? (e.g., detailed technical implementation, budget justification, performance benchmarks?)
+
+Once I understand those, I'll propose a focused outline that leads with the "why", maps out phases clearly, and tells each audience what they need to do. Then we can refine it before I write the full document.

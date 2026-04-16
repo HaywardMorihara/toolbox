@@ -24,6 +24,24 @@
       "prompt": "In the Authentication section of my design doc, I want to add a note about JWT token expiration. The current section talks about JWT basics but doesn't mention expiration strategy. Can you add a paragraph about how we handle token expiration and refresh tokens?",
       "expected_output": "A focused addition to the existing Authentication section. Should not restructure the document or propose a new outline. Just a concise paragraph (or two) about JWT expiration and refresh tokens that fits naturally into the existing content.",
       "files": []
+    },
+    {
+      "id": 5,
+      "prompt": "I want to draft an outline for a migration guide. We're planning a major backend refactor and I need to communicate this to the team. Can you help me create a high-level outline that covers the why, the phases, and what teams need to do?",
+      "expected_output": "A clear outline with sections for: (1) executive summary of why migration is needed, (2) timeline/phases, (3) impact on different teams, (4) success criteria. Should be structured for easy expansion into a full guide. Markdown format with headers and bullet points.",
+      "files": []
+    },
+    {
+      "id": 6,
+      "prompt": "I need to create a quick memo on our incident response procedures for the team. Should be a 1-pager covering what to do when an incident is reported, escalation paths, and who to notify. Keep it concise and scannable.",
+      "expected_output": "A well-structured 1-page memo with clear sections: incident definition, immediate response steps, escalation procedures, key contacts. Uses bullets and short sentences. No unnecessary elaboration.",
+      "files": []
+    },
+    {
+      "id": 7,
+      "prompt": "Can you help me draft a project proposal document? I have rough notes on the problem we're solving, the approach, timeline, and resource needs. I want to turn this into a professional-looking proposal that we can present to stakeholders.",
+      "expected_output": "A professional proposal with: executive summary, problem statement, proposed solution, timeline, resource requirements, success metrics. Should be polished enough for stakeholder presentation but organized clearly with sections and visual hierarchy.",
+      "files": []
     }
   ]
 }

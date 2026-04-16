@@ -1,0 +1,23 @@
+{
+  "eval_id": 5,
+  "eval_name": "draft-migration-outline",
+  "prompt": "I want to draft an outline for a migration guide. We're planning a major backend refactor and I need to communicate this to the team. Can you help me create a high-level outline that covers the why, the phases, and what teams need to do?",
+  "assertions": [
+    {
+      "name": "Has markdown headers",
+      "description": "Output uses markdown headers (# or ##) to structure sections"
+    },
+    {
+      "name": "Contains required sections",
+      "description": "Output includes sections for: why (motivation), phases/timeline, and team impact"
+    },
+    {
+      "name": "Uses bullets or lists",
+      "description": "Uses bullet points or numbered lists to make content scannable"
+    },
+    {
+      "name": "Concise and high-level",
+      "description": "Content is brief with short sentences, suitable for 1-pager expansion"
+    }
+  ]
+}

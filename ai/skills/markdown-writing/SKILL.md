@@ -1,7 +1,7 @@
 ---
 name: markdown-writing
 description: |
-  Improve technical writing (specs, READMEs, documentation) in Markdown files. Ensures writing is succinct and uses a Hemingway style (clear, direct, minimal words). Structures documents with high-level content first, then links readers to detailed sub-sections as needed. Use this skill whenever you're authoring or revising Markdown documentation, technical designs, or any prose-heavy Markdown file. Triggers on editing specs, READMEs, design docs, or when you mention "improve my writing", "refactor this doc", "make this more concise", or similar requests.
+  Improve technical writing (specs, READMEs, documentation) in Markdown files. Ensures writing is succinct and uses a Hemingway style (clear, direct, minimal words). Structures documents with high-level content first, then links readers to detailed sub-sections as needed. Use this skill whenever you're authoring, creating, or revising Markdown documentation, technical designs, or any prose-heavy Markdown file. Triggers on creating/drafting new docs, editing specs, READMEs, design docs, memos, or when you mention "improve my writing", "refactor this doc", "make this more concise", "draft", "outline", or similar requests.
 compatibility: null
 ---
 
