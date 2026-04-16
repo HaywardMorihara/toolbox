@@ -1,0 +1,23 @@
+{
+  "eval_id": 8,
+  "eval_name": "clarify-terminology-definition-minor-edit",
+  "prompt": "Please clarify the definition of 'Gateway' in the Terminology section. The current definition only mentions the primary use case, but it also applies to secondary/async scenarios. Can you update it to cover both paths?",
+  "assertions": [
+    {
+      "name": "Surgical edit, no restructuring",
+      "description": "Changes only the target definition, doesn't alter other sections or propose new structure"
+    },
+    {
+      "name": "Covers both paths",
+      "description": "Updated definition addresses both primary (synchronous) and secondary (asynchronous) scenarios"
+    },
+    {
+      "name": "Preserves original tone",
+      "description": "Maintains concise, list-style format of the Terminology section"
+    },
+    {
+      "name": "Clarifies without excessive length",
+      "description": "Adds necessary context without becoming verbose"
+    }
+  ]
+}

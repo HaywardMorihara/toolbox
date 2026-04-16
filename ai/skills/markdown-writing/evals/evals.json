@@ -42,6 +42,18 @@
       "prompt": "Can you help me draft a project proposal document? I have rough notes on the problem we're solving, the approach, timeline, and resource needs. I want to turn this into a professional-looking proposal that we can present to stakeholders.",
       "expected_output": "A professional proposal with: executive summary, problem statement, proposed solution, timeline, resource requirements, success metrics. Should be polished enough for stakeholder presentation but organized clearly with sections and visual hierarchy.",
       "files": []
+    },
+    {
+      "id": 8,
+      "prompt": "Please clarify the definition of 'Gateway' in the Terminology section. The current definition only mentions the primary use case, but it also applies to secondary/async scenarios. Can you update it to cover both paths?",
+      "expected_output": "A minor surgical edit to the Gateway definition in the Terminology section. Should expand the single bullet point to mention both primary (synchronous) and secondary (asynchronous) paths. No restructuring, just clarification of the definition.",
+      "files": []
+    },
+    {
+      "id": 9,
+      "prompt": "Can you reword the introduction paragraph in my documentation? It's a bit wordy and I want it to be punchier. Here's what's there now: 'Our system is composed of several interconnected components that work together in a coordinated fashion to deliver the desired functionality.'",
+      "expected_output": "A tighter, more direct rewrite of the introduction that follows Hemingway principles (short sentences, fewer adjectives, more specific). Should preserve the core meaning but cut unnecessary words and increase impact.",
+      "files": []
     }
   ]
 }

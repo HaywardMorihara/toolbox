@@ -1,0 +1,23 @@
+{
+  "eval_id": 9,
+  "eval_name": "tighten-introduction-paragraph",
+  "prompt": "Can you reword the introduction paragraph in my architecture doc? It's a bit wordy and I want it to be punchier. Here's what's there now: 'Our system is composed of several interconnected components that work together in a coordinated fashion to deliver the desired functionality.'",
+  "assertions": [
+    {
+      "name": "Applies Hemingway principles",
+      "description": "Output is concise, cuts unnecessary words (e.g., 'composed of', 'interconnected', 'work together in a coordinated fashion')"
+    },
+    {
+      "name": "More impactful and direct",
+      "description": "Reworded version is punchier and more specific than the original"
+    },
+    {
+      "name": "Preserves core meaning",
+      "description": "Maintains the essential information about system components and functionality"
+    },
+    {
+      "name": "Suitable for architecture doc intro",
+      "description": "Tone and style fit an architecture document's opening"
+    }
+  ]
+}
