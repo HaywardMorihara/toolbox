@@ -1,0 +1,93 @@
+{
+  "skill_name": "markdown-writing",
+  "results": [
+    {
+      "eval_name": "full-spec-from-rough-notes",
+      "eval_id": 1,
+      "configurations": [
+        {
+          "config": "with_skill",
+          "pass_rate": 0.0,
+          "avg_tokens": 17403,
+          "avg_duration_seconds": 6.6,
+          "assertion_results": []
+        },
+        {
+          "config": "without_skill",
+          "pass_rate": 1.0,
+          "avg_tokens": 18180,
+          "avg_duration_seconds": 25.0,
+          "assertion_results": []
+        }
+      ]
+    },
+    {
+      "eval_name": "readme-refactor-verbose-to-concise",
+      "eval_id": 2,
+      "configurations": [
+        {
+          "config": "with_skill",
+          "pass_rate": 0.0,
+          "avg_tokens": 17585,
+          "avg_duration_seconds": 5.5,
+          "assertion_results": [
+            {"text": "reduced_word_count", "passed": false},
+            {"text": "scannable_structure", "passed": false},
+            {"text": "removes_redundancy", "passed": false},
+            {"text": "preserves_info", "passed": false}
+          ]
+        },
+        {
+          "config": "without_skill",
+          "pass_rate": 1.0,
+          "avg_tokens": 16733,
+          "avg_duration_seconds": 8.6,
+          "assertion_results": [
+            {"text": "reduced_word_count", "passed": true},
+            {"text": "scannable_structure", "passed": true},
+            {"text": "removes_redundancy", "passed": true},
+            {"text": "preserves_info", "passed": true}
+          ]
+        }
+      ]
+    },
+    {
+      "eval_name": "architecture-doc-tighten-verbose-sections",
+      "eval_id": 3,
+      "configurations": [
+        {
+          "config": "with_skill",
+          "pass_rate": 1.0,
+          "avg_tokens": 18377,
+          "avg_duration_seconds": 11.8,
+          "assertion_results": [
+            {"text": "removes_filler_language", "passed": true},
+            {"text": "maintains_outline", "passed": true},
+            {"text": "improves_scannability", "passed": true},
+            {"text": "preserves_technical_detail", "passed": true}
+          ]
+        },
+        {
+          "config": "without_skill",
+          "pass_rate": 1.0,
+          "avg_tokens": 16813,
+          "avg_duration_seconds": 9.7,
+          "assertion_results": [
+            {"text": "removes_filler_language", "passed": true},
+            {"text": "maintains_outline", "passed": true},
+            {"text": "improves_scannability", "passed": true},
+            {"text": "preserves_technical_detail", "passed": true}
+          ]
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "overall_with_skill_pass_rate": 0.333,
+    "overall_without_skill_pass_rate": 1.0,
+    "avg_with_skill_tokens": 17788,
+    "avg_without_skill_tokens": 17242,
+    "avg_with_skill_duration": 7.96,
+    "avg_without_skill_duration": 14.43
+  }
+}

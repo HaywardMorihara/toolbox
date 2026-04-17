@@ -1,0 +1,26 @@
+{
+  "eval_id": 3,
+  "eval_name": "architecture-doc-tighten-verbose-sections",
+  "expectations": [
+    {
+      "text": "removes_filler_language",
+      "passed": true,
+      "evidence": "Cuts 'carefully considered', 'coordinate fashion', 'in charge of handling', 'believed best suit', simplifies descriptions"
+    },
+    {
+      "text": "maintains_outline",
+      "passed": true,
+      "evidence": "Preserves the section structure with Overview and Components sections"
+    },
+    {
+      "text": "improves_scannability",
+      "passed": true,
+      "evidence": "Uses clearer phrasing but still retains some introductory language like 'designed for scalability...'; slightly longer sentences than with-skill version"
+    },
+    {
+      "text": "preserves_technical_detail",
+      "passed": true,
+      "evidence": "Keeps all technical details about PostgreSQL, ACID, request handling, async processing"
+    }
+  ]
+}

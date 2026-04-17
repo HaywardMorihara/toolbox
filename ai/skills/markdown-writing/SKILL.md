@@ -1,88 +1,157 @@
 ---
 name: markdown-writing
 description: |
-  Improve technical writing (specs, READMEs, documentation) in Markdown files. Ensures writing is succinct and uses a Hemingway style (clear, direct, minimal words). Structures documents with high-level content first, then links readers to detailed sub-sections as needed. **CRITICAL: Trigger on ANY Markdown file edits or creation requests**, whether you're making small targeted changes or full rewrites. Use this skill whenever you're authoring, creating, editing, or revising Markdown documentation, technical designs, memos, proposals, outlines, or any prose-heavy Markdown file. Always consult this skill for requests to change, update, modify, reword, clarify, or improve Markdown content—even seemingly trivial edits may benefit from the Hemingway principles. Triggers include: "update", "change", "modify", "reword", "clarify", "improve", "fix", "make concise", "draft", "outline", "create", "edit", "refactor", "make this more", or any request mentioning a .md/.markdown file.
+  Improve technical writing in Markdown using Hemingway style (clear, direct, minimal words). Tighten verbose documents, improve structure, and apply information architecture principles. Use this skill for any Markdown editing, refactoring, or creation: READMEs, specs, design docs, proposals, guides, or technical writing. When the user's intent is clear, produce output immediately. Ask clarifying questions only if genuinely needed to create better results.
+triggers: |
+  - Any request mentioning .md, .markdown, or Markdown files
+  - Requests to "write", "create", "draft", "outline", "sketch" documentation or prose
+  - Requests to "update", "change", "modify", "reword", "clarify", "improve", "refactor", "tighten", "make concise", "edit" Markdown content
+  - Requests about documentation, specs, READMEs, proposals, design docs, architecture docs, guides, handbooks, or technical writing
+  - Requests asking for structure, organization, or information architecture improvements
 compatibility: null
 ---
 
-## Overview
+## How This Skill Works
 
-This skill helps you write clearer, more concise Markdown documents. It applies two principles:
+### When to Produce Output Immediately
 
-1. **Succinctness (Hemingway style)**: Direct language, no filler, every word earns its place
-2. **Information architecture**: High-level summaries first; detailed sub-sections come later and are linked from the top
+If the user has provided:
+- **Existing content to tighten** + a clear request to improve it → Rewrite immediately
+- **Rough notes or outline** + a request to "turn into a spec/guide/doc" → Structure and write immediately
+- **A paragraph to reword** + specific feedback about what to change → Revise immediately
 
-**Quick note on questions**: If you're making a **small, targeted edit** (clarify a term, reword a paragraph, add a note), the skill will NOT ask about audience/goals/non-goals—it'll just make the change. Only when you're creating a new document from scratch will the skill ask clarifying questions to shape the outline.
+Examples:
+- "This README is too wordy—tighten it up" (user provides README) → Produce refactored README
+- "Here are my rough notes about caching. Can you turn this into a design spec?" (user provides notes) → Write the spec
+- "Reword this section to be clearer" (user provides section) → Rewrite it
 
-## How to Use This Skill
+### When to Ask Clarifying Questions
 
-### Scenario 1: Minor Edits (No IA Phase)
+Ask questions **only when the user's intent is genuinely ambiguous** and clarification will lead to significantly better results. This is rare.
 
-If you're making a **small, localized change** to an existing document—adding a note, updating a section, rewriting a sentence, clarifying terminology, removing outdated content—use this skill for fast, focused edits. Just tell me what to change:
+Examples of when to ask:
+- User says "improve this document" but provides no content, no context about purpose or audience
+- User provides conflicting instructions ("make it shorter" but "add more detail about X")
+- User provides content but it's completely unclear what the goal is
 
-- "Please clarify the definition to mention both primary and secondary scenarios"
-- "Add a note about X to the [Section Name]"
-- "Update the configuration section to mention Y"
-- "Reword this sentence to be clearer"
-- "Remove the deprecated API reference"
-
-I'll make the change surgically without restructuring the document or proposing a new outline. Even "trivial" edits benefit from applying Hemingway principles—tighter language, clearer phrasing, better flow.
-
-**How I detect this**: You reference an existing section by name, ask to "add", "update", "remove", "clarify", "reword", or make other specific changes, and don't ask to refactor or restructure the whole document.
-
-### Scenario 2: Full Document Work (With IA Phase)
-
-If you're working from **raw thoughts, an outline, or a full document you want to refactor**—particularly when creating new documents from scratch—we'll collaborate on the information architecture first. **Note**: I only ask clarifying questions for full document creation/refactoring, not for minor edits to existing sections.
-
-1. **You provide input**: Raw thoughts, a rough outline, or the existing document
-2. **I ask three questions** (only if needed for document creation):
-   - **Audience**: Who will read this? (e.g., "engineers on my team", "API users", "future maintainers")
-   - **Goals**: What do you want readers to understand or be able to do?
-   - **Non-Goals**: What's explicitly out of scope?
-3. **I propose an outline** based on your answers
-4. **You refine it**: Adjust sections, reorder, add/remove details
-5. **I produce the full rewrite** using that outline, applying Hemingway principles throughout
+**Do not ask:**
+- "Who is the audience?" if the user's content already implies it (e.g., "I'm writing a README for developers")
+- "What are your goals?" if they already said "make this less wordy" or "turn this into a proper spec"
+- "What should be in scope?" if they provided the content—work with what they gave you
 
 ## Writing Principles
 
-### Succinctness (Hemingway Style)
+### Hemingway Style
+- **Short sentences**: Break complex ideas into multiple sentences
+- **Active voice**: "The caching layer handles requests" beats "Requests are handled by the caching layer"
+- **Specific language**: "Use LRU cache with 10,000 entries" beats "consider appropriate caching strategies"
+- **No filler**: Cut "It is important to note that", "arguably", "might", "perhaps", "to be honest"
+- **One idea per sentence**: Avoid cramming multiple concepts together
 
-- **Use short sentences.** Break complex ideas into multiple sentences rather than cramming them together.
-- **Cut unnecessary words.** Remove adjectives that don't add meaning, avoid hedging language ("might", "perhaps", "arguably").
-- **Be specific.** "Use TLS 1.3 for encryption" beats "make sure to consider encryption mechanisms."
-- **Avoid repetition.** Say something once, clearly, rather than restating it multiple times.
-- **No filler.** Delete: "It is important to note that...", "In summary, as we've discussed...", "It should be understood that..."
+**Bad example**: "It is often the case that developers may find themselves in a situation where they might want to consider using caching strategies in order to potentially improve overall system performance metrics."
 
-**Example:**
-- ❌ *Poor*: "It is often the case that developers may find themselves in a situation where they might want to consider using caching strategies in order to potentially improve overall system performance metrics."
-- ✅ *Better*: "Use caching to improve system performance."
+**Good example**: "Use caching to improve system performance."
 
 ### Information Architecture
+- **Lead with the summary**: 1-2 paragraphs answering "What is this? Why should I care?"
+- **Organized sections**: Group related ideas; use headers to guide readers
+- **Progressive disclosure**: High-level content first, details in subsections
+- **Scannable format**: Short paragraphs, bullet points, clear hierarchy
 
-Structure the document so readers encounter ideas in order of importance:
+Example structure for a spec:
+```
+# Feature Name
 
-1. **Lead with the summary**: Start with what readers need to know. One or two paragraphs that answer: What is this? Why should you care?
-2. **Provide a roadmap**: Briefly describe what sections follow and who they're for.
-3. **Detailed sections below**: Each section can go deep. Use headers and links to guide readers to the details they need.
+## Overview
+What is this feature and why does it matter? (2-3 sentences)
 
-**Example structure for a spec:**
-- 1-2 paragraph overview (what + why)
-- "For [Audience], see [Section]" pointers
-- Detailed sections (design, implementation, tradeoffs, etc.)
+## Key Decisions
+- Decision 1: Rationale
+- Decision 2: Rationale
 
-## The Rewrite Output
+## Implementation
+Detailed sections here...
+```
 
-When I produce the full rewrite, I will:
-- Apply the outline we agreed on
-- Write with succinctness and clarity (Hemingway style)
-- Keep high-level content at the top; push details into sub-sections
-- Preserve all substantive information from the original (or your outline)
-- Present the final Markdown as a clean, complete document
+## What You'll Do
 
-If you want to iterate further after the rewrite, we can refine sections, adjust the outline, or tighten specific passages.
+1. **Read the user's input** (content or rough notes)
+2. **Assess whether you have enough context**
+   - If yes → Proceed to step 3
+   - If no → Ask clarifying question(s) that will improve the output
+3. **Apply Hemingway principles**: Cut filler, shorten sentences, improve structure, use active voice
+4. **Organize for clarity**: Lead with summaries, use headers, progressive disclosure
+5. **Deliver the rewritten document** in Markdown
+6. **Offer iteration**: "Want me to adjust anything? Reorganize sections? Add more detail somewhere?"
 
-## Edge Cases
+## Examples
 
-- **Unclear input**: If I can't tell whether you want a minor edit or full IA collaboration, I'll ask.
-- **Existing document + minor edit**: If you reference a specific section, I treat it as a minor edit. If you say "refactor this whole thing", I treat it as Scenario 2.
-- **Very short documents**: Even a single-page README benefits from IA clarity—lead with the essential info, link to details.
+### Refactoring a verbose README
+
+Input (user provides):
+```
+# DataTool
+
+DataTool is a command-line interface tool that has been developed 
+to assist with the processing and transformation of data files. 
+It provides a wide range of functionalities...
+```
+
+Request: "This is too wordy. Can you make it more concise?"
+
+Output (you produce immediately):
+```
+# DataTool
+
+A CLI tool for processing and transforming data files in CSV, JSON, and XML formats.
+
+## Installation
+```bash
+pip install datatool
+```
+
+## Commands
+- **transform**: Convert data between formats
+- **validate**: Check data quality
+- **export**: Export in multiple formats
+- **merge**: Combine multiple files
+
+For details: `datatool <command> --help`
+```
+
+### Creating a spec from rough notes
+
+Input (user provides):
+```
+We're adding caching. Need to decide on LRU cache vs other strategies. 
+Where should it live—gateway or service? How do we handle invalidation? 
+TTL? Manual? Need to handle backwards compatibility too.
+```
+
+Request: "Can you turn this into a proper design spec?"
+
+Output (you produce immediately):
+```
+# Caching System Design
+
+## Overview
+We're adding a caching layer to reduce database load and improve response times. 
+This spec covers cache placement, strategy, invalidation, and backwards compatibility.
+
+## Key Decisions
+
+### Cache Location: Service-Level
+Rationale: Service-level caching gives us finer control over what gets cached...
+
+### Cache Strategy: LRU with TTL
+Rationale: LRU eviction prevents unbounded growth; TTL ensures fresh data...
+
+### Invalidation
+Manual cache invalidation on data mutations; TTL provides automatic expiration...
+
+### Backwards Compatibility
+Older clients ignore cache headers; behavior is unchanged for them...
+
+## Implementation
+[Detailed sections...]
+```

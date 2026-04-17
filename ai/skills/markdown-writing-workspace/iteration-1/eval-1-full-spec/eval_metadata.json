@@ -1,0 +1,23 @@
+{
+  "eval_id": 1,
+  "eval_name": "full-spec-from-rough-notes",
+  "prompt": "I've got this rough draft of a design spec I'm writing for a new feature. Can you help me turn it into a proper spec? Here's what I have: [rough caching notes]",
+  "assertions": [
+    {
+      "name": "has_opening_summary",
+      "description": "Spec starts with 1-2 paragraph executive summary of what the feature is and why it matters"
+    },
+    {
+      "name": "has_clear_structure",
+      "description": "Content is organized into logical sections with clear headers (not just a wall of text)"
+    },
+    {
+      "name": "addresses_key_questions",
+      "description": "Spec addresses the main open questions: where to place caching, cache policies, invalidation strategy, backwards compatibility"
+    },
+    {
+      "name": "concise_language",
+      "description": "Uses direct, concise language without filler phrases like 'we need to think about' or 'should probably'"
+    }
+  ]
+}

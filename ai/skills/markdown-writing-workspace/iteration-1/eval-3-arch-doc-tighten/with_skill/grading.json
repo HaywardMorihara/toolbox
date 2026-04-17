@@ -1,0 +1,26 @@
+{
+  "eval_id": 3,
+  "eval_name": "architecture-doc-tighten-verbose-sections",
+  "expectations": [
+    {
+      "text": "removes_filler_language",
+      "passed": true,
+      "evidence": "Eliminates phrases like 'designed for scalability, reliability, and maintainability' (moved to detail), removes 'coordinate fashion', simplifies 'Web Server is responsible for receiving...' to 'Routes incoming...'"
+    },
+    {
+      "text": "maintains_outline",
+      "passed": true,
+      "evidence": "Keeps three-section structure (Overview, Web Server, Message Queue, Database) intact with no reorganization"
+    },
+    {
+      "text": "improves_scannability",
+      "passed": true,
+      "evidence": "Uses shorter, punchier sentences ('Routes incoming...' vs 'The Web Server is responsible for receiving...'); each section is 1-2 sentences"
+    },
+    {
+      "text": "preserves_technical_detail",
+      "passed": true,
+      "evidence": "Retains all technical info: PostgreSQL choice, ACID guarantees, request validation, authentication, logging, compression, async processing"
+    }
+  ]
+}

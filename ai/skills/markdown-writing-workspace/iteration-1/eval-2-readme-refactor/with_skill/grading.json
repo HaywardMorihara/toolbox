@@ -1,0 +1,26 @@
+{
+  "eval_id": 2,
+  "eval_name": "readme-refactor-verbose-to-concise",
+  "expectations": [
+    {
+      "text": "reduced_word_count",
+      "passed": false,
+      "evidence": "Skill asked clarifying questions (Audience, Goals, Non-Goals) instead of producing output. Did not complete the refactoring task within the eval context."
+    },
+    {
+      "text": "scannable_structure",
+      "passed": false,
+      "evidence": "No output generated—task was incomplete due to skill's IA question phase"
+    },
+    {
+      "text": "removes_redundancy",
+      "passed": false,
+      "evidence": "No output generated—task was incomplete due to skill's IA question phase"
+    },
+    {
+      "text": "preserves_info",
+      "passed": false,
+      "evidence": "No output generated—task was incomplete due to skill's IA question phase"
+    }
+  ]
+}

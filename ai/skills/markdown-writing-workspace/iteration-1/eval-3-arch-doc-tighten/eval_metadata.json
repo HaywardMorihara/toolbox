@@ -1,0 +1,23 @@
+{
+  "eval_id": 3,
+  "eval_name": "architecture-doc-tighten-verbose-sections",
+  "prompt": "I'm working on this architecture doc. The outline looks good but it's really verbose in places. Can you tighten this up? Make it more direct and easier to scan?",
+  "assertions": [
+    {
+      "name": "removes_filler_language",
+      "description": "Eliminates unnecessary phrases like 'we have carefully considered', 'work together in a coordinated fashion', 'in charge of handling'"
+    },
+    {
+      "name": "maintains_outline",
+      "description": "Keeps the existing section structure and outline intact; doesn't suggest major reorganization"
+    },
+    {
+      "name": "improves_scannability",
+      "description": "Uses short sentences and clearer phrasing that's easier to scan and understand quickly"
+    },
+    {
+      "name": "preserves_technical_detail",
+      "description": "Retains all technical information about components, responsibilities, and technology choices"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "eval_id": 2,
+  "eval_name": "readme-refactor-verbose-to-concise",
+  "prompt": "Here's a README I wrote for a command-line tool. I think it's too wordy and hard to follow. Can you refactor it to be clearer and more concise?",
+  "assertions": [
+    {
+      "name": "reduced_word_count",
+      "description": "Final README is significantly shorter than the original (ideally 40-50% of original length)"
+    },
+    {
+      "name": "scannable_structure",
+      "description": "Uses clear headers, bullet points, and short paragraphs that readers can scan quickly"
+    },
+    {
+      "name": "removes_redundancy",
+      "description": "Eliminates repetitive explanation and hedging language (e.g., 'might want to consider', 'it is important to note')"
+    },
+    {
+      "name": "preserves_info",
+      "description": "Retains all essential information: installation, commands, command descriptions"
+    }
+  ]
+}
