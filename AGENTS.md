@@ -361,6 +361,95 @@ When creating new skills while working in this repository:
 
 **Why:** Skills in the toolbox repo are shared across the project and tracked in git. Global skills in ~/.claude/skills/ are user-specific and not version-controlled.
 
+## Skill Evals
+
+Skills can include test cases (evals) to verify correctness and guide development. Follow this structure:
+
+```
+ai/skills/<skill-name>/
+  SKILL.md                # The skill itself
+  evals/
+    evals.json            # Test case definitions (committed to git)
+  workspace/              # Eval run artifacts (git-ignored, ephemeral)
+    iteration-1/
+      <eval-id>/
+        eval_metadata.json        # Assertions rubric for this eval
+        with_skill/
+          outputs/                # Skill's actual output
+          grading.json            # Pass/fail results per assertion
+          timing.json             # Token and duration metrics
+        without_skill/
+          outputs/
+          grading.json
+          timing.json
+```
+
+**Key points:**
+
+- `evals/evals.json` is the canonical test case file — it's committed to git and shared
+- `workspace/` holds runtime artifacts from eval runs — it's git-ignored and purely local
+- The `with_skill/` vs `without_skill/` pattern allows A/B comparison (skill impact)
+- See `markdown-writing` skill as a reference example
+
+**Structure of `evals.json`:**
+
+```json
+{
+  "skill_name": "my-skill",
+  "evals": [
+    {
+      "id": 1,
+      "name": "eval-name",
+      "prompt": "The user's exact task prompt",
+      "expected_output": "Natural language description of correct output",
+      "files": []
+    }
+  ]
+}
+```
+
+**Assertions** (stored in `eval_metadata.json` during runs):
+
+Each eval can define assertions that verify the skill worked correctly. Assertions should be:
+- Objectively verifiable (not subjective judgment)
+- Specific and descriptive in name
+- Checked during grading against the actual output
+
+## Building and Testing Skills
+
+When developing a new skill:
+
+1. **Draft the skill** — Write `SKILL.md` with clear instructions and examples
+2. **Define test cases** — Create `evals/evals.json` with 3-4 realistic test prompts that cover different scenarios
+3. **Draft assertions** — For each test case, define what a correct output must demonstrate (e.g., "no recommendation language", "both sides covered")
+4. **Run evals** — Spawn parallel subagent runs for each test case:
+   - **With-skill run**: Subagent has access to the skill, executes the prompt, saves output to `workspace/iteration-N/<eval-id>/with_skill/outputs/`
+   - **Without-skill run**: Same prompt, no skill (baseline), saves to `workspace/iteration-N/<eval-id>/without_skill/outputs/`
+5. **Grade outputs** — For each run, evaluate assertions and record pass/fail in `grading.json`
+6. **Review with eval-viewer** — Use `eval-viewer/generate_review.py` to generate HTML viewer showing:
+   - Prompt + output for each test case
+   - Assertion pass/fail rates
+   - With-skill vs without-skill comparison
+7. **Iterate** — Based on feedback, improve the skill and rerun evals in a new iteration directory
+
+**Why this matters:**
+
+- Evals verify the skill actually does what it claims (Red-Green TDD pattern)
+- With/without comparison shows skill impact, not just correctness
+- Parallel runs save time: launch all 8 (4 evals × 2 variants) at once
+- Assertions are explicit and repeatable for future iterations
+
+**Example workflow:**
+
+```bash
+# After drafting skill and evals.json:
+# 1. Launch 8 subagent runs in parallel (with + without for each eval)
+# 2. While they run, draft assertion rubrics in ASSERTIONS.md
+# 3. Once complete, grade each output against assertions → grading.json
+# 4. Generate viewer HTML and review with user
+# 5. Based on feedback, improve skill and rerun → iteration-2/
+```
+
 ## References
 
 - README.md - Project overview and quick start

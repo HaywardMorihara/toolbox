@@ -5,3 +5,6 @@ private/*
 
 # Git worktrees directory
 .worktrees/
+
+# Skill eval workspaces (ephemeral eval run artifacts, not committed)
+ai/skills/*/workspace/
