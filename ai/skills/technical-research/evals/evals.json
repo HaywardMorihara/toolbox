@@ -1,0 +1,33 @@
+{
+  "skill_name": "technical-research",
+  "evals": [
+    {
+      "id": 1,
+      "name": "biased-framing-graphql",
+      "prompt": "Research why we should switch from REST to GraphQL for our API",
+      "expected_output": "Output should reframe the question to be neutral about both approaches. Should cover benefits and drawbacks of both REST and GraphQL. Should NOT recommend GraphQL. Should surface genuine tradeoffs like: GraphQL's learning curve vs REST's simplicity, GraphQL's query flexibility vs REST's cacheability, etc.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "neutral-comparison-databases",
+      "prompt": "Compare Postgres vs MySQL for a write-heavy workload with millions of rows",
+      "expected_output": "Should identify relevant dimensions (transaction handling, write performance, replication, ecosystem, operational complexity). Should present strengths and weaknesses of both databases for this use case. Should NOT pick a winner. Should surface tradeoffs and when each excels.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "single-tool-terraform-limits",
+      "prompt": "Research Terraform's limitations",
+      "expected_output": "Should acknowledge that Terraform is powerful but surface genuine limitations. Should also mention when Terraform works well and alternatives that might be better in certain scenarios. Should NOT frame Terraform as universally inferior. Should surface genuine tradeoffs with other IaC tools.",
+      "files": []
+    },
+    {
+      "id": 4,
+      "name": "architecture-monolith-vs-microservices",
+      "prompt": "Research whether microservices or monolith is the right architecture for our startup with 3 engineers",
+      "expected_output": "Should explicitly address that this decision depends heavily on context (team size, growth projections, complexity of domain). Should present both approaches' strengths and weaknesses for early-stage startups. Should NOT recommend either. Should highlight key tensions: microservices' operational overhead vs modularity benefits, monolith's simplicity vs scaling limits, etc.",
+      "files": []
+    }
+  ]
+}
