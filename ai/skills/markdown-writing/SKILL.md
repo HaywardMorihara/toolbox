@@ -13,10 +13,26 @@ compatibility: null
 
 ## How This Skill Works
 
+### Presentation Mode: Incremental or Immediate
+
+The skill adapts to user preference:
+
+**Incremental Mode** (recommended for substantial changes)
+- User says "review this with me" or "show me changes one by one"
+- Present **one focused improvement** at a time with context
+- User reviews, approves, adjusts, or rejects each change
+- Move to next change only after approval
+- Useful for: iterative refinement, learning the reasoning, fine-tuning tone
+
+**Immediate Mode** (default when intent is clear)
+- User provides content + clear improvement request → Produce full refactored output
+- No further interaction needed unless user asks for adjustments
+- Useful for: quick wins, straightforward rewrites, clear intent
+
 ### When to Produce Output Immediately
 
 If the user has provided:
-- **Existing content to tighten** + a clear request to improve it → Rewrite immediately
+- **Existing content to tighten** + a clear request to improve it → Rewrite immediately (unless they ask for step-by-step review)
 - **Rough notes or outline** + a request to "turn into a spec/guide/doc" → Structure and write immediately
 - **A paragraph to reword** + specific feedback about what to change → Revise immediately
 
@@ -24,6 +40,28 @@ Examples:
 - "This README is too wordy—tighten it up" (user provides README) → Produce refactored README
 - "Here are my rough notes about caching. Can you turn this into a design spec?" (user provides notes) → Write the spec
 - "Reword this section to be clearer" (user provides section) → Rewrite it
+
+### When to Present Changes Incrementally
+
+Offer or switch to incremental mode when:
+- User explicitly requests "show me changes one by one" or "review with me step by step"
+- Document is large or has many improvements possible
+- User wants to understand the reasoning for each change
+- User may want to adjust suggestions or provide feedback between changes
+
+**Incremental workflow:**
+1. Analyze the document and identify key improvements needed
+2. Present **first change** with:
+   - Context: What section/idea is being changed
+   - Original text (quoted)
+   - Improved text (quoted)
+   - Reasoning: Why this is better (Hemingway principle applied)
+3. Wait for user response:
+   - ✅ "Approve" → Save change, move to next
+   - 🔧 "Adjust" + feedback → Refine and re-present
+   - ❌ "Skip" → Move to next without this change
+   - ❓ "Why?" → Explain reasoning more fully
+4. Repeat until all improvements presented or user stops
 
 ### When to Ask Clarifying Questions
 
@@ -75,6 +113,7 @@ Detailed sections here...
 
 ## What You'll Do
 
+**For immediate mode:**
 1. **Read the user's input** (content or rough notes)
 2. **Assess whether you have enough context**
    - If yes → Proceed to step 3
@@ -84,9 +123,17 @@ Detailed sections here...
 5. **Deliver the rewritten document** in Markdown
 6. **Offer iteration**: "Want me to adjust anything? Reorganize sections? Add more detail somewhere?"
 
+**For incremental mode:**
+1. **Read and analyze** the document
+2. **Identify improvements** grouped by type (wordiness, structure, clarity, tone)
+3. **Present first improvement** with original → improved → reasoning
+4. **Get feedback** (approve/adjust/skip) before moving to next
+5. **Apply approved changes** incrementally, building toward final document
+6. **Recap final result** once all improvements are done
+
 ## Examples
 
-### Refactoring a verbose README
+### Immediate Mode: Refactoring a verbose README
 
 Input (user provides):
 ```
@@ -119,7 +166,7 @@ pip install datatool
 For details: `datatool <command> --help`
 ```
 
-### Creating a spec from rough notes
+### Immediate Mode: Creating a spec from rough notes
 
 Input (user provides):
 ```
@@ -154,4 +201,56 @@ Older clients ignore cache headers; behavior is unchanged for them...
 
 ## Implementation
 [Detailed sections...]
+```
+
+### Incremental Mode: Step-by-step review of improvements
+
+Input (user provides):
+```
+# Build System Architecture
+
+The build system that we have in place is quite complex. 
+It is important to note that it uses multiple orchestration tools 
+in order to manage dependencies, and they work together to ensure 
+that we are able to coordinate builds across different microservices. 
+This is arguably necessary for maintaining consistency and avoiding issues.
+```
+
+User request: "Review this with me one by one and show me the changes."
+
+Output (incremental):
+
+**Change 1: Wordiness in opening**
+- **Original:** "The build system that we have in place is quite complex. It is important to note that it uses multiple orchestration tools in order to manage dependencies..."
+- **Improved:** "Our build system coordinates multiple orchestration tools to manage dependencies..."
+- **Why:** Removes filler ("It is important to note", "in order to", "that we have in place"), uses active voice ("Our" + verb), tightens structure
+- **Your feedback?** (Approve / Adjust / Skip / Why?)
+
+---
+
+User: "Adjust — I want to mention it's currently complex"
+
+**Change 1 (revised):**
+- **Improved:** "Our build system is complex: it coordinates multiple orchestration tools to manage dependencies..."
+- **Your feedback?** (Approve / Adjust / Skip / Why?)
+
+---
+
+User: "Approve"
+
+**Change 2: "arguably" hedging**
+- **Original:** "This is arguably necessary for maintaining consistency..."
+- **Improved:** "This approach ensures consistency and prevents build failures..."
+- **Why:** Removes hedging ("arguably"), states value concretely instead of defending necessity
+- **Your feedback?** (Approve / Adjust / Skip / Why?)
+
+---
+
+User: "Approve"
+
+**Final result:**
+```
+# Build System Architecture
+
+Our build system is complex: it coordinates multiple orchestration tools to manage dependencies across microservices. This approach ensures consistency and prevents build failures.
 ```
