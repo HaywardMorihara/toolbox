@@ -189,6 +189,7 @@ if [[ $- == *i* ]]; then
   _CLAUDE_UPGRADE_STAMP="${XDG_CACHE_HOME:-$HOME/.cache}/toolbox/claude-upgrade-date"
   _TODAY="$(date +%Y-%m-%d)"
   if [[ "$(cat "$_CLAUDE_UPGRADE_STAMP" 2>/dev/null)" != "$_TODAY" ]]; then
+    mkdir -p "$(dirname "$_CLAUDE_UPGRADE_STAMP")"
     echo "$_TODAY" > "$_CLAUDE_UPGRADE_STAMP"
     echo "Checking for Claude Code updates..."
     brew upgrade claude-code
