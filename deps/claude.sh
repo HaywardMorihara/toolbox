@@ -18,28 +18,15 @@ install_claude() {
 
   log_info "Installing $component_name..."
 
-  # Claude is already at ~/.local/bin/claude for this user
-  # For general case, check if it's in the expected location
-  if [[ -f "$HOME/.local/bin/claude" ]]; then
-    log_success "$component_name found at ~/.local/bin/claude"
-
-    # Ensure ~/.local/bin is in PATH
-    if [[ ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
-      log_warn "Add $HOME/.local/bin to your PATH"
-    fi
-
-    return 0
-  fi
-
   # Try Homebrew if available
   if command -v brew &> /dev/null; then
-    if brew install --cask claude 2>/dev/null; then
+    if brew install --cask claude-code 2>/dev/null; then
       log_success "$component_name installed via Homebrew"
       return 0
     fi
   fi
 
-  log_warn "$component_name not installed. Install manually from https://claude.ai/download"
+  log_warn "$component_name not installed. Install via Homebrew: brew install --cask claude-code"
   return 1
 }
 
