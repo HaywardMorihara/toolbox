@@ -68,6 +68,7 @@ INSTALL_OPENCODE=false
 INSTALL_GH=false
 INSTALL_FONTS=false
 INSTALL_PANDOC=false
+INSTALL_TMUX=false
 INSTALL_DOTFILES=false
 INSTALL_ZSHRC=false
 INSTALL_AI_INSTRUCTIONS=false
@@ -93,6 +94,7 @@ OPTIONS:
   --gh           Install GitHub CLI
   --fonts        Install Hack Nerd Font
   --pandoc       Install Pandoc document converter
+  --tmux         Install tmux terminal multiplexer
   --dotfiles     Stow dotfiles (symlink ~/.zshrc.toolbox)
   --zshrc        Modify ~/.zshrc to source toolbox config
   --ai-instructions   Setup AI instructions for Claude Code and OpenCode
@@ -146,6 +148,9 @@ parse_flags() {
       --pandoc)
         INSTALL_PANDOC=true
         ;;
+      --tmux)
+        INSTALL_TMUX=true
+        ;;
       --dotfiles)
         INSTALL_DOTFILES=true
         ;;
@@ -174,7 +179,7 @@ parse_flags() {
     shift
   done
 
-  export INSTALL_ALL INSTALL_CONFIG INSTALL_BREW INSTALL_STOW INSTALL_TREE INSTALL_CLAUDE INSTALL_NEOVIM INSTALL_OPENCODE INSTALL_GH INSTALL_FONTS INSTALL_PANDOC INSTALL_DOTFILES INSTALL_ZSHRC INSTALL_AI_INSTRUCTIONS INSTALL_SKILLS INSTALL_UPDATE INTERACTIVE
+  export INSTALL_ALL INSTALL_CONFIG INSTALL_BREW INSTALL_STOW INSTALL_TREE INSTALL_CLAUDE INSTALL_NEOVIM INSTALL_OPENCODE INSTALL_GH INSTALL_FONTS INSTALL_PANDOC INSTALL_TMUX INSTALL_DOTFILES INSTALL_ZSHRC INSTALL_AI_INSTRUCTIONS INSTALL_SKILLS INSTALL_UPDATE INTERACTIVE
 }
 
 # Parse flags
@@ -259,19 +264,22 @@ main() {
   # 10. Install Pandoc
   install_pandoc || log_warn "Failed to install Pandoc"
 
-  # 11. Stow dotfiles (creates ~/.zshrc.toolbox symlink)
+  # 11. Install tmux
+  install_tmux || log_warn "Failed to install tmux"
+
+  # 12. Stow dotfiles (creates ~/.zshrc.toolbox symlink)
   stow_dotfiles "$REPO_ROOT" || log_warn "Failed to stow dotfiles"
 
-  # 11b. Store installation path (for shell functions to locate toolbox repo)
+  # 12b. Store installation path (for shell functions to locate toolbox repo)
   store_install_path || log_warn "Failed to store installation path"
 
-  # 12. Setup AI instructions (symlinks to Claude and OpenCode)
+  # 13. Setup AI instructions (symlinks to Claude and OpenCode)
   setup_ai_instructions || log_warn "Failed to setup AI instructions"
 
-  # 13. Setup Claude skills (symlinks to ~/.claude/skills)
+  # 14. Setup Claude skills (symlinks to ~/.claude/skills)
   setup_claude_skills || log_warn "Failed to setup Claude skills"
 
-  # 14. Modify ~/.zshrc (source ~/.zshrc.toolbox)
+  # 15. Modify ~/.zshrc (source ~/.zshrc.toolbox)
   setup_zshrc_integration || log_warn "Failed to setup .zshrc integration"
 
   # Summary
