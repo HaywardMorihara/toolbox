@@ -13,6 +13,7 @@ Ctrl+B $                # Rename session
 Ctrl+B s                # Interactive session switcher
 Ctrl+B (                # Previous session
 Ctrl+B d                # detach from the session
+tmux kill-session -t session-name
 
 # Windows
 Ctrl+B c                # Create window
