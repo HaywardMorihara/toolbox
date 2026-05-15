@@ -24,8 +24,8 @@ Natural language interaction with Jira using `acli jira workitem` (Atlassian CLI
 
 **Environment Variables (from `private/jira.sh`):**
 - `$JIRA_PROJECT` — Your project key (e.g., "ID")
-- `$JIRA_SITE` — Your Jira domain (e.g., "compass-tech.atlassian.net")
-- `$JIRA_USER` — Your email (e.g., "user@compass.com")
+- `$JIRA_SITE` — Your Jira domain (e.g., "my-company.atlassian.net")
+- `$JIRA_USER` — Your email (e.g., "user@my-company.com")
 - `$JIRA_TEAM` — Team UUID for custom field (auto-configured)
 - `$JIRA_LABEL_OPTIONS` — Available labels (comma-separated)
 
