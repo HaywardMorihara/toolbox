@@ -9,6 +9,7 @@
 tmux new-session -s myname
 tmux attach -t myname
 tmux list-sessions
+Ctrl+B $                # Rename session
 Ctrl+B s                # Interactive session switcher
 Ctrl+B (                # Previous session
 Ctrl+B d                # detach from the session
