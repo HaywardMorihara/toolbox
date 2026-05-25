@@ -2,6 +2,8 @@
 
 **Prefix key:** `Ctrl+B` (press, release, then next key)
 
+**Mac:** for `Opt`/`Alt` (Meta) bindings to work, enable Option as Meta — iTerm2: Preferences → Profiles → Keys → Left Option = **Esc+**; Terminal.app: Preferences → Profiles → Keyboard → **Use Option as Meta key**.
+
 ## Essential Commands
 
 ```bash
@@ -29,6 +31,7 @@ Ctrl+B x                # Kill pane
 :resize-pane -R 5       # Resize right by 5 columns
 :resize-pane -x 80      # Set absolute width to 80 columns 
 Ctrl+B Space            # Different layout
+Ctrl+B Opt+1            # Rebalance side-by-side panes to even width (Mac: Option key)
 Ctrl+B { (or })         # Swap panes
 
 # Copy mode
