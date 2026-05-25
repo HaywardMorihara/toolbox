@@ -40,6 +40,13 @@ stow_dotfiles() {
     return 1
   }
 
+  # Stow tmux package (using dotfiles/ directory)
+  stow -d dotfiles -t ~ tmux || {
+    log_error "Failed to stow tmux dotfiles"
+    log_info "If conflicts exist, backup and remove: ~/.tmux.conf"
+    return 1
+  }
+
   log_success "Dotfiles stowed successfully"
   return 0
 }
@@ -48,3 +55,4 @@ stow_dotfiles() {
 register_check "~/.zshrc.toolbox (symlinked)" "[[ -L \$HOME/.zshrc.toolbox ]]"
 register_check "~/.config/nvim (symlinked)" "[[ -L \$HOME/.config/nvim ]]"
 register_check "~/.config/toolbox (symlinked)" "[[ -L \$HOME/.config/toolbox ]]"
+register_check "~/.tmux.conf (symlinked)" "[[ -L \$HOME/.tmux.conf ]]"
