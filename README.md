@@ -54,6 +54,7 @@ The classic automation chart still applies, but remember: **with LLMs, the time 
 
 ### Configurations
 - **~/.zshrc.toolbox** - Custom Zsh config (symlinked via Stow)
+- **~/.tmux.conf.toolbox** - Tmux configuration with custom keybindings (symlinked via Stow)
 - **~/.config/nvim/** - Neovim configuration with lazy.nvim
 - **~/.config/toolbox/** - Config directory for toolbox-related settings
 - **~/.cache/toolbox/** - Cache directory for ephemeral toolbox data
