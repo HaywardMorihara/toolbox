@@ -98,7 +98,7 @@ Then **only ask for missing required fields**:
 
 3. **Required custom fields (from private config)**:
    - If `private/jira/config.md` exists, apply each required field it lists as a
-     `--field`/`--field-json` flag (e.g. `--field customfield_10200="$JIRA_TEAM"`)
+     `--field`/`--field-json` flag (the config gives the exact flags to use)
    - **Never ask the user** for these — the values come from `private/jira.sh`
 
 4. **Optional fields (only ask if not provided)**:
@@ -117,7 +117,7 @@ Then **only ask for missing required fields**:
      [--assignee email@example.com] \
      [--description "..."] \
      [--labels "label1,label2"] \
-     [--field customfield_10200="$JIRA_TEAM"]      # required fields from private config
+     [--field FIELD=VALUE ...]     # required custom fields from private/jira/config.md, if any
    ```
 
 6. **Execute & verify**: Run the script, then view the created ticket to confirm.
@@ -189,8 +189,8 @@ Ask yourself:
 
 Org-specific custom fields are **not** hardcoded in this skill — they live in
 `private/jira/config.md`. `jira-create-ticket.sh` accepts them generically:
-- `--field KEY=VALUE` — string value (e.g. `--field customfield_10200="$JIRA_TEAM"`)
-- `--field-json KEY=<json>` — object/array/select value (e.g. `--field-json customfield_10010=42`)
+- `--field KEY=VALUE` — string value (e.g. `--field customfield_XXXXX="$SOME_VALUE"`)
+- `--field-json KEY=<json>` — object/array/select value (e.g. `--field-json customfield_XXXXX=42`)
 
 **Discovering and recording a new field.** When a create fails because a field is
 required (or you need its ID), find it from an existing ticket, then add it to the
@@ -199,7 +199,7 @@ private config so future tickets include it automatically:
 ```bash
 curl -s -u "$JIRA_USER:$JIRA_API_TOKEN" \
   "https://$JIRA_SITE/rest/api/2/issue/KEY" | grep customfield
-# e.g. "customfield_10200": { "id": "d58100e1-...", "name": "Team Name" } → pass the id string
+# e.g. "customfield_XXXXX": { "id": "d58100e1-...", "name": "..." } → pass the id string
 ```
 
 **Managing the private config.** Offer to append the discovered field (ID, format, and the
@@ -282,8 +282,9 @@ export JIRA_PROJECT="PROJ"
 export JIRA_USER="your@email.com"
 export JIRA_BASE_URL="https://$JIRA_SITE"
 export JIRA_API_TOKEN="$(cat ~/.config/toolbox/jira-token.txt 2>/dev/null)"
-export JIRA_TEAM="team-uuid-here"  # Team UUID from customfield_10200
 export JIRA_EPIC_IDS="ID-100,ID-200"  # Frequently used epic IDs (descriptions fetched dynamically)
+# Org-specific custom-field values go here too, then reference them from private/jira/config.md.
+# Example: export JIRA_TEAM="team-uuid-here"  # used as --field customfield_XXXXX="$JIRA_TEAM"
 ```
 
 Then reload your shell:
@@ -351,7 +352,7 @@ acli jira workitem transition --help
 
 **Diagnosis:**
 ```bash
-# The Team field is likely a custom field, not a standard flag
+# The required field is likely a custom field, not a standard flag
 # Check an existing ticket to find the field ID
 curl -u "$JIRA_USER:$JIRA_API_TOKEN" \
   "https://$JIRA_SITE/rest/api/2/issue/SAMPLE-KEY" | \
@@ -359,7 +360,7 @@ curl -u "$JIRA_USER:$JIRA_API_TOKEN" \
 ```
 
 **Fix:**
-- Identify the custom field ID (e.g., `customfield_10200`) and its UUID/ID format
+- Identify the custom field ID (e.g., `customfield_XXXXX`) and its UUID/ID format
 - Pass it via `jira-create-ticket.sh --field`/`--field-json`
 - Record it in `private/jira/config.md` (not SKILL.md — it's org-specific)
 
@@ -443,12 +444,14 @@ When you discover an issue:
 4. **Update** the relevant section in SKILL.md or references/commands.md
 5. **Document** the fix with a comment explaining why the old instruction was wrong
 
+Note: org-specific custom fields belong in `private/jira/config.md`, not here — only
+commit fixes to generic command syntax/flags.
+
 **Example commit message:**
 ```
-fix: correct custom field handling in jira skill
+fix: correct transition flag in jira skill
 
-Discovered that Team field is customfield_10200 (not a CLI flag).
-Updated workflow to use REST API v2 for tickets with custom fields.
+acli renamed --status to --to-status; updated SKILL.md and references/commands.md.
 ```
 
 ---
