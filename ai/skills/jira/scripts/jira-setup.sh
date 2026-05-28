@@ -299,6 +299,18 @@ EOF
 chmod 600 "$private_dir/jira.sh"
 echo "✓ Created $private_dir/jira.sh"
 
+# Scaffold the private org-config (git-ignored) from the committed template.
+# Holds org-specific custom fields and special API calls; the Jira skill reads it.
+jira_config_dir="$private_dir/jira"
+config_template="$TOOLBOX_ROOT/ai/skills/jira/references/config-template.md"
+if [[ -f "$jira_config_dir/config.md" ]]; then
+  echo "✓ Private config already exists: $jira_config_dir/config.md (left unchanged)"
+elif [[ -f "$config_template" ]]; then
+  mkdir -p "$jira_config_dir/scripts"
+  cp "$config_template" "$jira_config_dir/config.md"
+  echo "✓ Created $jira_config_dir/config.md (from template) — edit it to add org-specific fields"
+fi
+
 echo ""
 echo "─────────────────────────────────────────"
 echo ""

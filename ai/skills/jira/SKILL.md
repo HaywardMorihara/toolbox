@@ -22,12 +22,25 @@ Natural language interaction with Jira using `acli jira workitem` (Atlassian CLI
 | List my issues | `acli jira workitem search --jql "assignee = currentUser()"` |
 | My in-progress | `acli jira workitem search --jql "assignee = currentUser() AND status = 'In Progress'"` |
 
-**Environment Variables (from `private/jira.sh`):**
+**Environment Variables (values, from `private/jira.sh`):**
 - `$JIRA_PROJECT` — Your project key (e.g., "ID")
 - `$JIRA_SITE` — Your Jira domain (e.g., "my-company.atlassian.net")
 - `$JIRA_USER` — Your email (e.g., "user@my-company.com")
-- `$JIRA_TEAM` — Team UUID for custom field (auto-configured)
 - `$JIRA_LABEL_OPTIONS` — Available labels (comma-separated)
+- Org-specific custom-field values (e.g. `$JIRA_TEAM`) referenced by your private config
+
+---
+
+## Private Configurations
+
+Organization-specific knowledge (required custom fields, special API calls) lives in
+`private/jira/` — git-ignored, never committed. **At the start of any Jira operation,
+check for `private/jira/config.md`; if it exists, read it and apply its required custom
+fields and special calls.** Also check `private/jira/scripts/` for helper scripts. If it
+doesn't exist, just use the generic flow below.
+
+`jira-setup.sh` scaffolds `private/jira/config.md` from
+`references/config-template.md`. See "Working with Custom Fields" to extend it.
 
 ---
 
@@ -83,10 +96,10 @@ Then **only ask for missing required fields**:
    - Convert to `AskUserQuestion` options (max 4 options; include "Other" for custom entry)
    - Extract epic ID from selection
 
-3. **Team (always auto-filled)**:
-   - Team UUID is in `$JIRA_TEAM` (set by `private/jira.sh`)
-   - The script automatically passes this as `customfield_10200`
-   - **Never ask the user**
+3. **Required custom fields (from private config)**:
+   - If `private/jira/config.md` exists, apply each required field it lists as a
+     `--field`/`--field-json` flag (e.g. `--field customfield_10200="$JIRA_TEAM"`)
+   - **Never ask the user** for these — the values come from `private/jira.sh`
 
 4. **Optional fields (only ask if not provided)**:
    - **Description**: If user provided details/criteria, draft a structured description. Otherwise, ask "Would you like to add a description?"
@@ -100,11 +113,11 @@ Then **only ask for missing required fields**:
      --project "$JIRA_PROJECT" \
      --type Story \
      --summary "..." \
-     --parent ID-XXXX \
-     --team "$JIRA_TEAM" \
+     [--parent ID-XXXX] \
      [--assignee email@example.com] \
      [--description "..."] \
-     [--labels "label1,label2"]
+     [--labels "label1,label2"] \
+     [--field customfield_10200="$JIRA_TEAM"]      # required fields from private config
    ```
 
 6. **Execute & verify**: Run the script, then view the created ticket to confirm.
@@ -174,40 +187,24 @@ Ask yourself:
 
 ## Working with Custom Fields
 
-Some Jira instances have custom fields that `acli` doesn't expose as CLI flags. When creating tickets with required custom fields:
+Org-specific custom fields are **not** hardcoded in this skill — they live in
+`private/jira/config.md`. `jira-create-ticket.sh` accepts them generically:
+- `--field KEY=VALUE` — string value (e.g. `--field customfield_10200="$JIRA_TEAM"`)
+- `--field-json KEY=<json>` — object/array/select value (e.g. `--field-json customfield_10010=42`)
 
-1. **Identify the custom field ID**: Fetch an existing ticket via REST API to find the field:
-   ```bash
-   curl -u "$JIRA_USER:$JIRA_API_TOKEN" \
-     "https://$JIRA_SITE/rest/api/2/issue/KEY" | grep customfield
-   ```
+**Discovering and recording a new field.** When a create fails because a field is
+required (or you need its ID), find it from an existing ticket, then add it to the
+private config so future tickets include it automatically:
 
-2. **Get the field value UUID** (if it's a select field):
-   ```bash
-   # Look for the field in the JSON response
-   # Example: "customfield_10200": { "id": "d58100e1-...", "name": "Team Name" }
-   ```
+```bash
+curl -s -u "$JIRA_USER:$JIRA_API_TOKEN" \
+  "https://$JIRA_SITE/rest/api/2/issue/KEY" | grep customfield
+# e.g. "customfield_10200": { "id": "d58100e1-...", "name": "Team Name" } → pass the id string
+```
 
-3. **Use REST API v2 for creation** when custom fields are required:
-   ```bash
-   curl -X POST \
-     -u "$JIRA_USER:$JIRA_API_TOKEN" \
-     -H "Content-Type: application/json" \
-     -d '{
-       "fields": {
-         "project": { "key": "$JIRA_PROJECT" },
-         "summary": "...",
-         "issuetype": { "name": "Task" },
-         "parent": { "key": "ID-XXXX" },
-         "customfield_10200": "team-uuid-here"
-       }
-     }' \
-     "https://$JIRA_SITE/rest/api/2/issue"
-   ```
-
-**Example:**
-- Team field: `customfield_12345`
-- "My Team - Team 1" UUID: `d58100e1-b897-4ed9-963c-9db91a741234`
+**Managing the private config.** Offer to append the discovered field (ID, format, and the
+exact `--field`/`--field-json` flag) to `private/jira/config.md`. If that file doesn't
+exist, run `jira-setup.sh` or copy `references/config-template.md` into `private/jira/`.
 
 ## Safety
 
@@ -246,8 +243,9 @@ This will guide you through:
 1. Installing acli (if needed)
 2. Creating and storing your API token securely
 3. Setting up environment variables in `private/jira.sh`
-4. Authenticating with acli
-5. Verifying your setup
+4. Scaffolding `private/jira/config.md` from the template (org-specific fields)
+5. Authenticating with acli
+6. Verifying your setup
 
 ### Manual Setup
 
@@ -349,7 +347,7 @@ acli jira workitem transition --help
 
 ### 2. **Custom Field Issues (Team, etc.)**
 
-**If you see:** "The Team field is required" or "unknown flag: --team"
+**If you see:** "The X field is required" (e.g. Team) when creating a ticket
 
 **Diagnosis:**
 ```bash
@@ -361,10 +359,9 @@ curl -u "$JIRA_USER:$JIRA_API_TOKEN" \
 ```
 
 **Fix:**
-- Identify the custom field ID (e.g., `customfield_10200`)
-- Find the field's current value and its UUID/ID format
-- Use REST API v2 instead of acli when creating with custom fields
-- Update SKILL.md with the correct field ID and format
+- Identify the custom field ID (e.g., `customfield_10200`) and its UUID/ID format
+- Pass it via `jira-create-ticket.sh --field`/`--field-json`
+- Record it in `private/jira/config.md` (not SKILL.md — it's org-specific)
 
 ### 3. **Parent/Child Hierarchy Issues**
 
@@ -478,3 +475,4 @@ Updated workflow to use REST API v2 for tickets with custom fields.
 
 References:
 - `references/commands.md` - Complete acli command reference
+- `references/config-template.md` - Template for `private/jira/config.md` (org-specific fields)
