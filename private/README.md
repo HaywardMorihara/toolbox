@@ -37,6 +37,20 @@ gwip() {
 
 After creating the file, run `refresh` and your commands will be available!
 
+## Skill configurations
+
+Skills can keep **organization-specific** configuration here too, in a per-skill
+subdirectory (e.g. `private/jira/`). This is for knowledge that should never be committed
+to the shared repo — required custom fields, special API calls, internal endpoints.
+
+Convention:
+
+- `private/<skill>/config.md` — markdown the skill reads at runtime and applies
+- `private/<skill>/scripts/` — helper scripts for complex/repeated calls
+
+For Jira, run `bash ai/skills/jira/scripts/jira-setup.sh` to scaffold `private/jira/config.md`
+from `ai/skills/jira/references/config-template.md`, or copy that template by hand.
+
 ## Tips
 
 - Use descriptive function names to avoid conflicts

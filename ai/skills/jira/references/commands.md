@@ -98,7 +98,11 @@ acli jira workitem create --project "$JIRA_PROJECT" --from-json "workitem.json"
 # Generate JSON template
 acli jira workitem create --generate-json
 
-# Create via REST API v2 (when custom fields are required)
+# When custom fields are required, prefer the helper script (handles JSON safely):
+#   bash ai/skills/jira/scripts/jira-create-ticket.sh --project "$JIRA_PROJECT" \
+#     --type Task --summary "..." --field customfield_10200="$JIRA_TEAM"
+# Org-specific fields are documented in private/jira/config.md.
+# The raw REST equivalent:
 curl -X POST \
   -u "$JIRA_USER:$JIRA_API_TOKEN" \
   -H "Content-Type: application/json" \
