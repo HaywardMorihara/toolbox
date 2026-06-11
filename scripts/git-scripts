@@ -1,0 +1,69 @@
+#!/bin/bash
+
+set -e
+
+usage() {
+  cat <<EOF
+Usage: git-scripts <command> [options]
+
+Commands:
+  pr-branch <branch-name>          Fetch and checkout a branch from origin
+  change <message> [files...]      Add files and commit with message
+
+Examples:
+  git-scripts pr-branch feature-x
+  git-scripts change "Fix bug" src/
+  git-scripts change "WIP" .
+EOF
+  exit 1
+}
+
+pr_branch() {
+  if [[ -z "$1" ]]; then
+    echo "Error: branch name required"
+    usage
+  fi
+
+  local branch="$1"
+  echo "Fetching and checking out origin/$branch..."
+  git fetch origin "$branch"
+  git checkout "origin/$branch"
+  git switch -c "$branch"
+  echo "Checked out origin/$branch"
+}
+
+change() {
+  if [[ -z "$1" ]]; then
+    echo "Error: commit message required"
+    usage
+  fi
+
+  local message="$1"
+  shift
+
+  if [[ $# -eq 0 ]]; then
+    set -- "."
+  fi
+
+  git add "$@"
+  git commit -m "$message"
+}
+
+if [[ -z "$1" ]]; then
+  usage
+fi
+
+case "$1" in
+  pr-branch)
+    shift
+    pr_branch "$@"
+    ;;
+  change)
+    shift
+    change "$@"
+    ;;
+  *)
+    echo "Error: unknown command '$1'"
+    usage
+    ;;
+esac
