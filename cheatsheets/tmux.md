@@ -20,6 +20,7 @@ tmux kill-session -t session-name
 # Windows
 Ctrl+B c                # Create window
 Ctrl+B ,                # Rename window
+Ctrl+B w                # List windows
 Ctrl+B n                # Next window
 Ctrl+B 0                # Swtich to index 0 window
 Ctrl+B &                # Delete window
