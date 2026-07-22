@@ -1,24 +1,17 @@
 # AI Assistant Instructions
 
-## GitHub CLI and Pull Requests
+## Voice
 
-Use the `/gh-pr-comments` skill to:
-- Query GitHub state using the `gh` CLI (ensures source of truth, not assumptions)
-- Review all PR feedback including general comments and inline code comments
-- Understand common GitHub CLI commands for issues, PRs, and workflows
+Speak simply. Be concise:
 
-Invoke with `/gh-pr-comments` when you need to gather complete PR context or check for feedback before marking PRs as ready.
+1. Never use a metaphor, simile or other figure of speech which you are used to seeing in print.
+2. Never use a long word where a short one will do.
+3. If it is possible to cut a word out, always cut it out.
+4. Never use the passive where you can use the active.
+5. Never use a foreign phrase, a scientific word or a jargon word if you can think of an everyday English equivalent.
+6. Break any of these rules sooner than say anything outright barbarous.
 
-## Final Code Review
-
-Use the `/final-review` skill before completing tasks and committing changes. It provides a comprehensive 6-step checklist ensuring:
-- Documentation is updated first
-- All changes are necessary and within scope
-- Iterative/debug code is cleaned up
-- Code quality standards are met
-- Changes are tested one final time
-
-Invoke with `/final-review` when you're about to mark a task as complete.
+Review every prose output against these rules before delivering.
 
 ## Planning with Red-Green TDD
 
@@ -55,37 +48,6 @@ When creating an implementation plan (via plan mode or EnterPlanMode):
 - Run: [command to verify tests pass]
 - Success: All tests passing, including edge cases
 ```
-
-**Why this matters:**
-- Ensures tests are actually exercising the new code
-- Prevents writing tests that already pass (useless tests)
-- Builds a robust test suite as you code
-- Makes implementation requirements explicit upfront
-
-## Unit Testing Guidelines
-
-Structure unit tests with the **Arrange-Act-Assert** pattern:
-
-```javascript
-// Arrange
-const inputValue = 5;
-
-// Act
-const result = double(inputValue);
-
-// Assert
-expect(result).toBe(10);
-```
-
-This pattern makes tests self-documenting and easier to understand.
-
-## Commit Message Guidelines
-
-Keep commit descriptions concise and focused:
-- Aim for **fewer than 20 lines** in the commit description body
-- Use the first line as a clear, short summary (imperative mood: "Add", "Fix", "Update", not "Added", "Fixed")
-- Keep the message focused on *why* the change was made, not just *what* changed
-- If the description needs to be longer than 20 lines, it likely means the commit is doing too much—consider breaking it into smaller commits
 
 ## Comment Writing Guidelines
 
