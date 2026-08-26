@@ -38,6 +38,9 @@ setup_claude_skills() {
     return 1
   }
 
+  # Remove symlinks for skills that no longer exist in ai/skills/
+  cleanup_removed_skills
+
   local installed=0
   local skipped=0
 
@@ -83,6 +86,43 @@ setup_claude_skills() {
     log_success "$component_name: $skipped already linked"
   fi
 
+  return 0
+}
+
+# Remove symlinks in ~/.claude/skills that point into this repo's ai/skills/
+# but whose source skill has been deleted (dangling links).
+cleanup_removed_skills() {
+  local skills_source="$REPO_ROOT/ai/skills"
+  local skills_target="$HOME/.claude/skills"
+
+  [[ -d "$skills_target" ]] || return 0
+
+  local removed=0
+  local link target
+  for link in "$skills_target"/*; do
+    # Only consider symlinks
+    [[ -L "$link" ]] || continue
+
+    target=$(readlink "$link")
+
+    # Only manage links that point into this repo's ai/skills/ directory
+    case "$target" in
+      "$skills_source"/*) ;;
+      *) continue ;;
+    esac
+
+    # If the source skill still exists, keep the link
+    [[ -e "$target" ]] && continue
+
+    if rm "$link"; then
+      log_info "Removed stale skill symlink: $(basename "$link")"
+      ((removed++))
+    else
+      log_error "Failed to remove stale skill symlink: $link"
+    fi
+  done
+
+  [[ $removed -gt 0 ]] && log_success "Cleaned up $removed removed skill(s)"
   return 0
 }
 
