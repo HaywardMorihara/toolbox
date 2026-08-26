@@ -29,6 +29,10 @@ for script in "$SCRIPT_DIR"/lib/*.sh; do
   if [[ "$(basename "$script")" == "common.sh" ]]; then
     continue
   fi
+  # Skip test files; they're not library code and run their own assertions on source
+  if [[ "$(basename "$script")" == *.test.sh ]]; then
+    continue
+  fi
   if [[ ! -r "$script" ]]; then
     echo "ERROR: Cannot read library script: $script" >&2
     exit 1
