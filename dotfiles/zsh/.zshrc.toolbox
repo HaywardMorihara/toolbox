@@ -162,6 +162,17 @@ mdstrip() {
   bash "$TOOLBOX_ROOT/scripts/markdown-strip-images.sh" "$@"
 }
 
+# Is automating a task worth the time? (xkcd 1205)
+# Wrapper for scripts/is-automation-worth-it.sh
+# Usage: is-automation-worth-it [--years N] [<time-saved> <frequency> <time-to-build>]
+is-automation-worth-it() {
+  if [[ -z "$TOOLBOX_ROOT" ]]; then
+    echo "Error: Toolbox installation path not configured" >&2
+    return 1
+  fi
+  bash "$TOOLBOX_ROOT/scripts/is-automation-worth-it.sh" "$@"
+}
+
 # ===== Environment Variables =====
 # Add tool-specific environment variables here
 
