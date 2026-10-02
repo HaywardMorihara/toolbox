@@ -1,1 +1,2 @@
-When coding, do Red-Green TDD.
+When coding, always:
+* Do Red-Green TDD.

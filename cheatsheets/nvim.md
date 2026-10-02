@@ -172,6 +172,7 @@ Once in the file tree:
 | `gd` | Go to definition (requires LSP) |
 | `K` | Hover documentation (requires LSP) |
 | `gr` | Find references (requires LSP) |
+| `gc` | Comment out selection |
 | `<leader>rn` | Rename symbol (requires LSP) |
 | `<leader>ca` | Code actions (requires LSP) |
 | `Ctrl+Space` | Trigger autocompletion |
